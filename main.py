@@ -1,6 +1,7 @@
 from user import login
 from console import actions
 from exchanges import exchangeshelper
+from bot import bothelper
 
 name_input = str(raw_input("What is your name, trader?\n"))
 password_input = login.get_password()
@@ -32,9 +33,14 @@ while not dead:
         # add new bot
         if exchangeshelper.has_exchanges_saved(password_input, filename_lower):
             # continue creating
-            print("Yo")
+            # select what kind of bot
+            bot = bothelper.create_bot()
+            if bothelper.validate_bot(bot):
+                bothelper.start_bot(bot)
+            else:
+                print("[Error] Bot cannot be validated.\n")
         else:
-            print("Please insert exchange(s) information first.\n")
+            print("[Error] Please insert exchange(s) information first.\n")
     elif action == "L":
         exchangeshelper.list_exchanges(password_input, filename_lower)
     elif action == "Q":

@@ -17,7 +17,7 @@ def get_password():
 
 
 def check_name(filename):
-    if os.path.isfile(helper.get_file_name(filename)):
+    if os.path.isfile(helper.get_user_file_name(filename)):
         return True
     else:
         return False
