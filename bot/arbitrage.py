@@ -2,22 +2,22 @@ from botinterface import BotInterface
 
 
 class Arbitrage(BotInterface):
-    exchanges = []
 
     def init(self, exchanges):
-        if not exchanges or len(exchanges) < 1:
-            return False
-        else:
-            self.exchanges = exchanges
-            # TODO: get some information (prices, order values, etc)
-            return True
-
-    def start(self):
-        # TODO: Save bot in database for main bot to pick up (botManager)?
+        self.exchanges = exchanges
         return
 
     def get_values(self):
+        # TODO: exchanges is same to values now
         return self.exchanges
 
     def get_exchanges(self):
         return self.exchanges
+
+    def print_values(self):
+        print("Exchanges:")
+        for exchange in self.get_exchanges():
+            print(exchange)
+        print("Values:")
+        for value in self.get_values():
+            print(value)

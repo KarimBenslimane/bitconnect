@@ -7,7 +7,7 @@ def crypt_key(password, key):
 
 
 def get_user_file_name(filename):
-    return 'database/users' + filename
+    return 'database/users/' + filename
 
 
 def get_full_path_user(filename):
@@ -19,11 +19,11 @@ def get_full_path_bot(filename):
 
 
 def get_bot_file_name(filename):
-    return 'database/bots' + filename
+    return 'database/bots/' + filename
 
 
 def add_bot_to_file(filename, values):
-    file_w = open(get_bot_file_name(filename), "w+")
+    file_w = open(get_bot_file_name(filename), "a+")
     # TODO: format values to column like
     file_w.write(values)
     file_w.close()

@@ -19,12 +19,12 @@ while not dead:
     action = str(actions.get_action())
     if action == "E":
         # add exchange
-        if exchangeshelper.add_exchange(password_input, filename_lower):
-            print("Successfully added a new exchange.\n")
+        exchangeshelper.add_exchange_to_user(password_input, filename_lower)
+        print("Successfully added a new exchange.\n")
     elif action == "D":
         # remove exchange
         exchange_input = str(raw_input("Please enter the exchange to be deleted.")).lower()
-        deleted_outcome = exchangeshelper.remove_exchange(exchange_input, filename_lower)
+        deleted_outcome = exchangeshelper.remove_exchange_from_user(exchange_input, filename_lower)
         if deleted_outcome:
             print("Successfully removed " + exchange_input + " from your database.\n")
         else:
@@ -35,14 +35,17 @@ while not dead:
             # continue creating
             # select what kind of bot
             bot = bothelper.create_bot()
+            exchanges = exchangeshelper.get_bot_trade_exchanges(password_input, filename_lower)
+            bothelper.init_bot(bot, exchanges)
             if bothelper.validate_bot(bot):
-                bothelper.start_bot(bot)
+                bothelper.start_bot(filename_lower, bot)
             else:
                 print("[Error] Bot cannot be validated.\n")
         else:
             print("[Error] Please insert exchange(s) information first.\n")
     elif action == "L":
-        exchangeshelper.list_exchanges(password_input, filename_lower)
+        print("Your saved exchanges are:")
+        exchangeshelper.list_user_exchanges(password_input, filename_lower)
     elif action == "Q":
         print("Goodbye...\n")
         dead = True

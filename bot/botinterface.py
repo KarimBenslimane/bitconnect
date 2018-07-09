@@ -3,6 +3,7 @@ from abc import ABCMeta, abstractmethod
 
 class BotInterface:
     __metaclass__ = ABCMeta
+    exchanges = []
 
     @abstractmethod
     def init(self, exchanges):
@@ -10,15 +11,16 @@ class BotInterface:
         return
 
     @abstractmethod
-    def start(self):
-        # start the bot
-        return
-
-    @abstractmethod
     def get_exchanges(self):
         # get exchanges
         return
 
+    @abstractmethod
     def get_values(self):
         # get values
+        return
+
+    @abstractmethod
+    def print_values(self):
+        # print values
         return
