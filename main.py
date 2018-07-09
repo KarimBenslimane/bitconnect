@@ -17,7 +17,7 @@ else:
 dead = False
 while not dead:
     action = str(actions.get_action())
-    # @todo convet to foreach operation = exchangeshelper.getOperations && operation.getKey = action?
+    # @todo convert to foreach operation = exchangeshelper.getOperations && operation.getKey = action?
     # @todo ^ Verbeterd leesbaarheid zodra veel operations geimplement worden + dan alleen in exchangeshelper die zooi definieren
     # @todo uitvogelen hoe verschillende exchanges hierin verwerkt kunnen worden.
     # @todo hierin dan ook console/actions verwerken? Beetje gek dat dat nu aparte file waarin het NOG een keer staat
