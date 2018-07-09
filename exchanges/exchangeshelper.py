@@ -1,6 +1,7 @@
 from file import helper
 from exchanges import exchangemanager
 
+# @todo rename naar Helper voor Exchanges/Helper en omzetten naar een class?
 
 def list_user_exchanges(password, filename):
     values = helper.read_user_file(password, filename)
