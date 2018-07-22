@@ -1,6 +1,7 @@
 from simplecrypt import encrypt, decrypt
 import os
 
+
 # @TODO Check if possible to use BCrypt with salts
 # @TODO Check if possible to use MySQL instead of files > Future use of webinterface etc
 def crypt_key(password, key):
