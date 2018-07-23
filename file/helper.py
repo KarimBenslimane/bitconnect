@@ -12,12 +12,8 @@ def get_user_file_name(filename):
     return 'database/users/' + filename
 
 
-def get_full_path_user(filename):
-    return os.getcwd() + '/' + get_user_file_name(filename)
-
-
-def get_full_path_bot(filename):
-    return os.getcwd() + '/' + get_bot_file_name(filename)
+def get_full_path(filename):
+    return os.getcwd() + '/' + filename
 
 
 def get_bot_file_name(filename):
@@ -32,7 +28,7 @@ def add_bot_to_file(filename, values):
 
 
 def read_bot_file(filename):
-    file_path = get_full_path_bot(filename)
+    file_path = get_full_path(get_bot_file_name(filename))
     if os.path.exists(file_path):
         file_r = open(file_path, "r")
         lines = file_r.readlines()
@@ -44,7 +40,7 @@ def read_bot_file(filename):
 
 
 def read_user_file(password, filename):
-    file_path = get_full_path_user(filename)
+    file_path = get_full_path(get_user_file_name(filename))
     if os.path.exists(file_path):
         file_r = open(file_path, "r")
         lines = file_r.readlines()
@@ -70,7 +66,7 @@ def add_exchange_to_user_file(password, filename, public_key, private_key, excha
 
 
 def remove_exchange_from_user_file(exchange, filename):
-    file_path = get_full_path_user(filename)
+    file_path = get_full_path(get_user_file_name(filename))
     deleted = False
     if os.path.exists(file_path):
         file_r = open(file_path, "r")
