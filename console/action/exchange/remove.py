@@ -8,6 +8,7 @@ class Remove(BaseAction):
         super().__init__()
         self.action = 'exchange_remove'
         self.func = self.execute
+        # TODO add init function that adds exchange option
 
     def execute(self, args):
         exchangeshelper.remove_exchange(args.filename)

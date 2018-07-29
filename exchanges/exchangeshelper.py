@@ -1,7 +1,7 @@
 from exchanges import exchangemanager
 from file import helper
 
-
+#TODO zijn al die password/filename(user) arguments hier nodig? > weghalen en in actions eenmalig checken?
 # @todo rename naar Helper voor Exchanges/Helper en omzetten naar een class?
 # @todo Misschien beter niet voor de proof of concept? (Die was alleen technieken uitproberen, nog niet extra functionaliteit.)
 # @todo ^ hiervoor losse actions als classes in console/actions? Die dan deze helper/manager aanroepen?
@@ -81,5 +81,6 @@ def remove_exchange(filename):
 
 
 def list_exchanges(password, filename):
+    #TODO does this need them?
     print("Your saved exchanges are:")
     list_user_exchanges(password, filename)

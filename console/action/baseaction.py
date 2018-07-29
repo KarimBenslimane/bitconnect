@@ -2,15 +2,16 @@
 class BaseAction:
     def __init__(self):
         # Initialize the to be filled variables to None and set default argument flags and description
+        #TODO rename -f/--filename to user?
         self.action = None
-        self.func = None
+        self.func = self.action
         self.flags = [
             ['-p', '--password'],
             ['-f', '--filename']
         ]
         self.arguments = [
-            {'dest': 'password'},
-            {'dest': 'filename'}
+            {'dest': 'password', 'required': True},
+            {'dest': 'filename', 'required': True}
         ]
 
     def init(self, subparser):
@@ -27,5 +28,6 @@ class BaseAction:
             base_subparser.add_argument(*(self.flags[i]), **(self.arguments[i]))
         return base_subparser
 
+    # Should be filled by children
     def execute(self, args):
         pass

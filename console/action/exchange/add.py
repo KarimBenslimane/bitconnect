@@ -8,6 +8,7 @@ class Add(BaseAction):
         super().__init__()
         self.action = 'exchange_add'
         self.func = self.execute
+        # TODO add init function that adds exchange option
 
     def execute(self, args):
         exchangeshelper.add_exchange(args.password, args.filename)
