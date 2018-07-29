@@ -2,7 +2,7 @@ from getpass import getpass
 from file import helper
 import os.path
 
-
+# TODO Remove this with new action setup?
 def get_password():
     password_first = str(
         getpass("Please insert your password. If this is your first time, please remember it for the next one."))
