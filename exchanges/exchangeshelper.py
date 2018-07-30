@@ -1,7 +1,8 @@
-from file import helper
 from exchanges import exchangemanager
+from file import helper
 
 
+# TODO zijn al die password/filename(user) arguments hier nodig? > weghalen en in actions eenmalig checken?
 # @todo rename naar Helper voor Exchanges/Helper en omzetten naar een class?
 # @todo Misschien beter niet voor de proof of concept? (Die was alleen technieken uitproberen, nog niet extra functionaliteit.)
 # @todo ^ hiervoor losse actions als classes in console/actions? Die dan deze helper/manager aanroepen?
@@ -11,7 +12,7 @@ def list_user_exchanges(password, filename):
     if len(values) > 0:
         for key, value in values.iteritems():
             print(key)
-    print("\n")
+            print("\n")
 
 
 def has_exchanges_saved(password, filename):
@@ -41,14 +42,13 @@ def get_bot_trade_exchanges(password, filename):
     list_user_exchanges(password, filename)
     exchange_input = ''
     while exchange_input != "q":
-        exchange_input = str(
-            raw_input("Please insert the name of the exchange you want to add, if you want to quit press (q).")).lower()
+        input("Please insert the name of the exchange you want to add, if you want to quit press (q).").lower()
         if exchange_input == "q":
             continue
-        if is_user_exchange(exchange_input, password, filename) and exchange_input not in exchanges:
-            exchanges.append(exchange_input)
-        else:
-            print("[Error] " + exchange_input + " is not a valid exchange or has already been added.")
+    if is_user_exchange(exchange_input, password, filename) and exchange_input not in exchanges:
+        exchanges.append(exchange_input)
+    else:
+        print("[Error] " + exchange_input + " is not a valid exchange or has already been added.")
     return exchanges
 
 
@@ -71,7 +71,7 @@ def add_exchange(args):
 
 
 def remove_exchange(filename):
-    exchange_input = str(raw_input("Please enter the exchange to be deleted.")).lower()
+    exchange_input = str(input("Please enter the exchange to be deleted.")).lower()
     deleted_outcome = remove_exchange_from_user(exchange_input, filename)
     if deleted_outcome:
         print("Successfully removed " + exchange_input + " from your database.\n")

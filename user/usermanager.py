@@ -43,15 +43,15 @@ class UserManager:
             for user in users:
                 self.print_user(user)
 
-    def create_user(self, args):
+    def create_user(self, username, password):
         """
         Create a new user in the database
         :param args:
         :return User:
         """
-        if not args.username or not args.password:
+        if not username or not password:
             raise Exception("Username and password must be given")
         else:
-            user = self.user_repo.create(username=args.username, password=args.password)
+            user = self.user_repo.create(username=username, password=password)
             print("Successfully created a new User. \n")
             self.print_user(user)
