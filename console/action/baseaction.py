@@ -2,7 +2,6 @@
 class BaseAction:
     def __init__(self):
         # Initialize the to be filled variables to None and set default argument flags and description
-        #TODO rename -f/--filename to user?
         self.action = None
         self.func = self.action
         self.flags = [

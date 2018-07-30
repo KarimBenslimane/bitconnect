@@ -3,7 +3,7 @@ from user.usermanager import UserManager
 
 
 # Needs no init function due to only needing base arguments
-class Remove(BaseAction):
+class Create(BaseAction):
     user_manager = None
 
     def __init__(self):
