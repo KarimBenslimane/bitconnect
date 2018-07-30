@@ -1,4 +1,4 @@
-from botinterface import BotInterface
+from .botinterface import BotInterface
 
 
 class Arbitrage(BotInterface):

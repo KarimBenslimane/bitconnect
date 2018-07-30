@@ -10,6 +10,7 @@ def get_exchanges():
     return ccxt.exchanges
 
 
-def print_exchanges():
+def print_exchanges(args):
     for exchange in get_exchanges():
         print(exchange)
+
