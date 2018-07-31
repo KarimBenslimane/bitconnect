@@ -1,4 +1,8 @@
 class User:
+    USER_ID = 'id'
+    USER_NAME = 'name'
+    USER_PASSWORD = 'password'
+
     id = ''
     name = ''
     password = ''

@@ -1,8 +1,14 @@
 from database.repositoryinterface import RepositoryInterface
+from database.connection import Connection
 from .user import User
 
 
 class UserRepository(RepositoryInterface):
+
+    def __init__(self):
+        self.connection = Connection('users')
+        super().__init__()
+        self.table = 'users'
 
     def get(self, id):
         """
@@ -13,11 +19,15 @@ class UserRepository(RepositoryInterface):
         query = "SELECT * FROM users WHERE users.user_id = %s;"
         params = str(id)
         users = self.database.executeQuery(query, params)
+        user = self.connection.query(TYPE_SELECT, {User.USER_ID: id})
+
         user = None
         if users:
             data = users[0]
             user = self.create_model(data)
         return user
+
+        return self.database.execute(query)
 
     def getList(self, search_criteria):
         """

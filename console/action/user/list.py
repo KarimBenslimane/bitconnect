@@ -10,10 +10,8 @@ class List(BaseAction):
         self.action = 'user_list'
         self.func = self.execute
         self.user_manager = UserManager()
-        self.init_args()
-
-    def init_args(self):
         self.flags.append(['-id', '--userid'])
+        # TODO DEFAULT NONE
         self.arguments.append({'dest': 'id'})
 
     def execute(self, args):

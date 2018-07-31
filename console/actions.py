@@ -1,10 +1,10 @@
 import argparse
-from console.action.exchange.add import Add as AddExchange
-from console.action.exchange.list import List as ListExchanges
-from console.action.exchange.remove import Remove as RemoveExchange
-from console.action.bot.add import Add as AddBot
-from console.action.user.create import Create as CreateUser
-from console.action.user.list import List as ListUser
+from console.action.exchange.add import Add as ExchangeAdd
+from console.action.exchange.list import List as ExchangeList
+from console.action.exchange.remove import Remove as ExchangeRemove
+from console.action.bot.add import Add as BotAdd
+from console.action.user.create import Create as UserCreate
+from console.action.user.list import List as UserList
 from user import login
 
 
@@ -12,12 +12,12 @@ class Actions:
     def __init__(self):
         # Add new actions here to have them included automatically
         self.actions = [
-            AddExchange(),
-            ListExchanges(),
-            RemoveExchange(),
-            AddBot(),
-            CreateUser(),
-            ListUser()
+            ExchangeAdd(),
+            ExchangeList(),
+            ExchangeRemove(),
+            BotAdd(),
+            UserCreate(),
+            UserList()
         ]
 
         # Sets up class variables for the parsers, subparsers array has the filled parsers for each action
@@ -44,5 +44,5 @@ class Actions:
         # TODO add correct login functionality + actual database > see file/helper.py?
         args = self.parser.parse_args()
         # TODO REPLACE LOGIN CHECKNAME WITH OTHER LOGIN
-        #login.check_name(args.filename)
+        # login.check_name(args.filename)
         args.func(args)
