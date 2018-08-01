@@ -1,5 +1,5 @@
 class User:
-    USER_ID = 'id'
+    USER_ID = 'user_id'
     USER_NAME = 'name'
     USER_PASSWORD = 'password'
 

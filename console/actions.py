@@ -5,10 +5,12 @@ from console.action.exchange.remove import Remove as ExchangeRemove
 from console.action.bot.add import Add as BotAdd
 from console.action.user.create import Create as UserCreate
 from console.action.user.list import List as UserList
-from user import login
+from user.login import Login
 
 
 class Actions:
+    login = None
+
     def __init__(self):
         # Add new actions here to have them included automatically
         self.actions = [
@@ -21,6 +23,7 @@ class Actions:
         ]
 
         # Sets up class variables for the parsers, subparsers array has the filled parsers for each action
+        self.login = Login()
         self.parser = None
         self.subparser = None
         self.subparsers = []
@@ -40,9 +43,14 @@ class Actions:
             self.subparsers.append(self.actions[i].init(self.subparser))
 
     def execute(self):
-        # Parse the given arguments and execute the correct action after checking login
-        # TODO add correct login functionality + actual database > see file/helper.py?
-        args = self.parser.parse_args()
-        # TODO REPLACE LOGIN CHECKNAME WITH OTHER LOGIN
-        # login.check_name(args.filename)
-        args.func(args)
+        try:
+            # Parse the given arguments and execute the correct action after checking login
+            args = self.parser.parse_args()
+            if self.login.check_login(username=args.username, password=args.password):
+                args.func(args)
+            else:
+                print("No user found with that username and password.")
+        except AttributeError as ex:
+            template = "An exception of type {0} occurred. Arguments:\n{1!r}"
+            message = template.format(type(ex).__name__, ex.args)
+            print(message)

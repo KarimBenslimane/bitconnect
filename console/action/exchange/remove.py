@@ -1,5 +1,4 @@
 from console.action.baseaction import BaseAction
-from exchanges import exchangeshelper
 
 
 # Needs no init function due to only needing base arguments

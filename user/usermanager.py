@@ -1,4 +1,5 @@
 from .userrepository import UserRepository
+from .user import User
 
 
 class UserManager:
@@ -15,33 +16,37 @@ class UserManager:
         """
         return self.user_repo.get(id)
 
-    def get_users(self):
+    def get_user_by_username(self, username):
+        """
+        Retrieve a user from database by username
+        :param username:
+        :return User[] | []:
+        """
+        return self.user_repo.getList(search_criteria={User.USER_NAME: username})
+
+    def get_users(self, search_criteria):
         """
         Retrieve user from database
         :return User[]:
         """
-        return self.user_repo.getList([])
+        return self.user_repo.getList(search_criteria=search_criteria)
 
     def print_user(self, user):
         """
         Print User info
         :param user:
         """
-        print("Name: " + user.get_name())
         print("Id: " + user.get_id())
+        print("Name: " + user.get_name())
         print("\n")
 
-    def list_user(self, args):
+    def list_user(self, search_criteria):
         """
         List all users or one user if -id option is given
         """
-        if args.id:
-            user = self.get_user(args.id)
+        users = self.get_users(search_criteria)
+        for user in users:
             self.print_user(user)
-        else:
-            users = self.get_users()
-            for user in users:
-                self.print_user(user)
 
     def create_user(self, username, password):
         """

@@ -1,7 +1,4 @@
 from console.action.baseaction import BaseAction
-from exchanges import exchangeshelper
-from bot import bothelper
-
 
 # Needs no init function due to only needing base arguments
 class Add(BaseAction):

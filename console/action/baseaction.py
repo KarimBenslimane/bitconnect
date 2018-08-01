@@ -5,12 +5,12 @@ class BaseAction:
         self.action = None
         self.func = self.action
         self.flags = [
-            ['-p', '--password'],
-            ['-u', '--username']
+            ['-u', '--username'],
+            ['-p', '--password']
         ]
         self.arguments = [
-            {'dest': 'password', 'required': True},
-            {'dest': 'username', 'required': True}
+            {'dest': 'username', 'required': True},
+            {'dest': 'password', 'required': True}
         ]
 
     def init(self, subparser):

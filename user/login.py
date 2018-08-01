@@ -1,23 +1,20 @@
-from getpass import getpass
-from file import helper
-import os.path
-
-# TODO Remove this with new action setup?
-def get_password():
-    password_first = str(
-        getpass("Please insert your password. If this is your first time, please remember it for the next one."))
-    password_second = str(
-        getpass("Please confirm your password.")
-    )
-    if password_first == password_second:
-        return password_first
-    else:
-        print("[Error] Passwords did not match up. Please try again.\n")
-        return get_password()
+from .usermanager import UserManager
 
 
-def check_name(filename):
-    if os.path.isfile(helper.get_user_file_name(filename)):
-        return True
-    else:
+class Login:
+    user_manager = None
+
+    def __init__(self):
+        self.user_manager = UserManager()
+
+    def check_login(self, username, password):
+        """
+        Check if a user exists with that username and check if the given password is correct
+        :param username:
+        :param password:
+        :return bool:
+        """
+        users = self.user_manager.get_user_by_username(username)
+        if users and users[0].get_password() == password:
+            return True
         return False

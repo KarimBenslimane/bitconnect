@@ -1,4 +1,5 @@
 from console.action.baseaction import BaseAction
+from user.user import User
 from user.usermanager import UserManager
 
 
@@ -10,10 +11,13 @@ class List(BaseAction):
         self.action = 'user_list'
         self.func = self.execute
         self.user_manager = UserManager()
-        self.flags.append(['-id', '--userid'])
         # TODO DEFAULT NONE
+        self.flags.append(['-id', '--userid'])
         self.arguments.append({'dest': 'id'})
 
     def execute(self, args):
-        self.user_manager.list_user(args)
+        if args.id:
+            self.user_manager.list_user({User.USER_ID: args.id})
+        else:
+            self.user_manager.list_user([])
         return self

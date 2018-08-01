@@ -4,11 +4,10 @@ from .user import User
 
 
 class UserRepository(RepositoryInterface):
+    tablename = 'users'
 
     def __init__(self):
-        self.connection = Connection('users')
-        super().__init__()
-        self.table = 'users'
+        super().__init__(self.tablename)
 
     def get(self, id):
         """
@@ -16,18 +15,8 @@ class UserRepository(RepositoryInterface):
         :param id:
         :return User:
         """
-        query = "SELECT * FROM users WHERE users.user_id = %s;"
-        params = str(id)
-        users = self.database.executeQuery(query, params)
-        user = self.connection.query(TYPE_SELECT, {User.USER_ID: id})
-
-        user = None
-        if users:
-            data = users[0]
-            user = self.create_model(data)
-        return user
-
-        return self.database.execute(query)
+        user_data = self.connection.query(Connection.TYPE_SELECT, {User.USER_ID: id})
+        return self.create_model(user_data)
 
     def getList(self, search_criteria):
         """
@@ -35,14 +24,11 @@ class UserRepository(RepositoryInterface):
         :param search_criteria:
         :return User[]:
         """
-        # TODO IMPLEMENT search_criteria
-        query = "SELECT * FROM users"
-        params = ()
-        data = self.database.executeQuery(query, params)
+        user_data = self.connection.query_all(Connection.TYPE_SELECT, search_criteria)
         models = []
-        if data:
-            for user_data in data:
-                model = self.create_model(user_data)
+        if user_data:
+            for user in user_data:
+                model = self.create_model(user)
                 models.append(model)
         return models
 
@@ -56,10 +42,13 @@ class UserRepository(RepositoryInterface):
         :param password:
         :return User:
         """
-        query = "INSERT INTO users (name, password) values (%s, %s);"
-        params = (str(username), str(password))
-        self.database.executeQuery(query, params)
-        return self.get(self.database.getLastId())
+        self.connection.query(
+            Connection.TYPE_INSERT,
+            {User.USER_NAME: username, User.USER_PASSWORD: password}
+        )
+        # TODO: maybe replace last_insert_id with something specific
+        # TODO: when many people will use the system to avoid wrong ids return
+        return self.get(self.connection.query_last_insert_id())
 
     def create_model(self, data):
         """
