@@ -69,3 +69,15 @@ class ExchangeRepository(RepositoryInterface):
         model.set_private(data[3])
         model.set_user_id(data[4])
         return model
+
+    def delete(self, exchange_id):
+        """
+        Delete an exchange from the database
+        :param exchange_id:
+        """
+        self.connection.query(
+            Connection.TYPE_DELETE,
+            {
+                Exchange.EXCHANGE_ID: exchange_id
+            }
+        )

@@ -57,6 +57,15 @@ class UserManager:
         if not username or not password:
             raise Exception("Username and password must be given")
         else:
-            user = self.user_repo.create(username=username, password=password)
-            print("Successfully created a new User. \n")
-            self.print_user(user)
+            return self.user_repo.create(username=username, password=password)
+
+    def delete_user(self, user_id):
+        """
+        Delete an existing user from the database
+        :param user_id:
+        :return:
+        """
+        if user_id:
+            self.user_repo.delete(user_id=user_id)
+        else:
+            raise Exception("No user_id found for deleting user.")

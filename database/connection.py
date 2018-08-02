@@ -4,6 +4,7 @@ from .database import Database
 class Connection:
     TYPE_SELECT = 'select'
     TYPE_INSERT = 'insert'
+    TYPE_DELETE = 'delete'
 
     tablename = None
     database = None
@@ -33,7 +34,7 @@ class Connection:
     def query_last_insert_id(self):
         """
         Retrieve the last created ID
-        :return:
+        :return string:
         """
         return self.database.query(query="SELECT LAST_INSERT_ID();", params=[])
 
@@ -47,8 +48,10 @@ class Connection:
         query = ""
         if query_type == self.TYPE_SELECT:
             query = self.add_select_string(data)
-        if query_type == self.TYPE_INSERT:
+        elif query_type == self.TYPE_INSERT:
             query = self.add_insert_string(data)
+        elif query_type == self.TYPE_DELETE:
+            query = self.add_delete_string(data)
         return query
 
     def add_select_string(self, data):
@@ -58,16 +61,13 @@ class Connection:
         :return string:
         """
         string = "SELECT * FROM " + self.tablename
-        if len(data) > 0:
-            string += self.add_where_string(data)
-        string += ";"
-        return string
+        return self.finish_with_where(string, data)
 
     def add_where_string(self, data):
         """
         Create a where clause for a query string
         :param data:
-        :return:
+        :return string:
         """
         string = " WHERE "
         for key, value in data.items():
@@ -80,7 +80,7 @@ class Connection:
         """
         Create an insert string with given data
         :param data:
-        :return:
+        :return string:
         """
         string = "INSERT INTO " + self.tablename + " ("
         for key, value in data.items():
@@ -95,11 +95,32 @@ class Connection:
         string += ");"
         return string
 
+    def add_delete_string(self, data):
+        """
+        Create a delete string with given data
+        :param data:
+        :return string:
+        """
+        string = "DELETE FROM " + self.tablename
+        return self.finish_with_where(string, data)
+
+    def finish_with_where(self, string, data):
+        """
+        Check if a where clause is needed, add semiclon to wrap up query
+        :param string:
+        :param data:
+        :return string: 
+        """
+        if len(data) > 0:
+            string += self.add_where_string(data)
+        string += ";"
+        return string
+
     def get_params(self, data):
         """
         Create params list for the query string
         :param data:
-        :return:
+        :return []:
         """
         params = []
         if data:

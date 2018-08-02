@@ -3,13 +3,13 @@ from exchanges.exchangemanager import ExchangeManager
 from user.usermanager import UserManager
 
 
-class Add(BaseAction):
+class Create(BaseAction):
     exchange_manager = None
     user_manager = None
 
     def __init__(self):
         super().__init__()
-        self.action = 'exchange_add'
+        self.action = 'exchange_create'
         self.func = self.execute
         self.exchange_manager = ExchangeManager()
         self.user_manager = UserManager()
@@ -25,9 +25,15 @@ class Add(BaseAction):
         self.arguments.append({'dest': 'userid'})
 
     def execute(self, args):
+        """
+        Create an exchange for an user. If not user_id is given it defaults to the current logged in user.
+        :param args:
+        """
         if args.userid:
-            self.exchange_manager.create_exchange(args.name, args.public, args.private, args.userid)
+            exchange = self.exchange_manager.create_exchange(args.name, args.public, args.private, args.userid)
         else:
             userid = self.user_manager.get_user_by_username(args.username)[0].get_id()
-            self.exchange_manager.create_exchange(args.name, args.public, args.private, userid)
-        return self
+            exchange = self.exchange_manager.create_exchange(args.name, args.public, args.private, userid)
+        print("Successfully created a new Exchange.")
+        self.exchange_manager.print_exchange(exchange)
+

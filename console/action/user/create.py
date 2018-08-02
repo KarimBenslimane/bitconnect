@@ -13,5 +13,6 @@ class Create(BaseAction):
         self.user_manager = UserManager()
 
     def execute(self, args):
-        self.user_manager.create_user(args.username, args.password)
-        return self
+        user = self.user_manager.create_user(args.username, args.password)
+        print("Successfully created a new User.")
+        self.user_manager.print_user(user)

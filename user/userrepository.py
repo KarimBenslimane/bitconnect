@@ -61,3 +61,15 @@ class UserRepository(RepositoryInterface):
         model.set_name(data[1])
         model.set_password(data[2])
         return model
+
+    def delete(self, user_id):
+        """
+        Delete an user from the database
+        :param user_id:
+        """
+        self.connection.query(
+            Connection.TYPE_DELETE,
+            {
+                User.USER_ID: user_id
+            }
+        )

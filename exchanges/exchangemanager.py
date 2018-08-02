@@ -53,6 +53,15 @@ class ExchangeManager:
         if not exchangename or not public_key or not private_key:
             raise Exception("Exchangename, public key and private key must be given")
         else:
-            exchange = self.exch_repo.create(exchangename, public_key, private_key, user_id)
-            print("Successfully created a new Exchange. \n")
-            self.print_exchange(exchange)
+            return self.exch_repo.create(exchangename, public_key, private_key, user_id)
+
+    def delete_exchange(self, exchange_id):
+        """
+        Delete an existing exchange from the database
+        :param exchange_id:
+        :return:
+        """
+        if exchange_id:
+            self.exch_repo.delete(exchange_id=exchange_id)
+        else:
+            raise Exception("No exchange_id found for deleting exchange.")
