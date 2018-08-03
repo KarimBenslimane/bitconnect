@@ -1,23 +1,20 @@
-from .botinterface import BotInterface
+class Arbitrage:
+    ARBITRAGE_BOT = 'bot_id'
+    ARBITRAGE_E1 = 'exchange_one'
+    ARBITRAGE_E2 = 'exchange_two'
 
+    bot_id = ''
+    exchange_one = ''
+    exchange_two = ''
 
-class Arbitrage(BotInterface):
+    def set_bot(self, bot_id):
+        self.bot_id = bot_id
+        return self
 
-    def init(self, exchanges):
-        self.exchanges = exchanges
-        return
+    def set_exchange_one(self, exchange):
+        self.exchange_one = exchange
+        return self
 
-    def get_values(self):
-        # TODO: exchanges is same to values now
-        return self.exchanges
-
-    def get_exchanges(self):
-        return self.exchanges
-
-    def print_values(self):
-        print("Exchanges:")
-        for exchange in self.get_exchanges():
-            print(exchange)
-        print("Values:")
-        for value in self.get_values():
-            print(value)
+    def set_exchange_two(self, exchange):
+        self.exchange_two = exchange
+        return self

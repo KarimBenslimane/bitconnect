@@ -106,10 +106,10 @@ class Connection:
 
     def finish_with_where(self, string, data):
         """
-        Check if a where clause is needed, add semiclon to wrap up query
+        Check if a where clause is needed, add semicolon to wrap up query
         :param string:
         :param data:
-        :return string: 
+        :return string:
         """
         if len(data) > 0:
             string += self.add_where_string(data)

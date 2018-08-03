@@ -32,9 +32,6 @@ class ExchangeRepository(RepositoryInterface):
                 models.append(model)
         return models
 
-    def save(self, abstractobject):
-        return
-
     def create(self, exchangename, public_key, private_key, user_id):
         """
         Create an exchange in database and retrieve the Exchange
@@ -60,7 +57,7 @@ class ExchangeRepository(RepositoryInterface):
         """
         Create an Exchange model from database data (id, exchangename, public, private, user_id)
         :param data:
-        :return User:
+        :return Bot:
         """
         model = Exchange()
         model.set_id(data[0])

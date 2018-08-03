@@ -51,7 +51,8 @@ class UserManager:
     def create_user(self, username, password):
         """
         Create a new user in the database
-        :param args:
+        :param username:
+        :param password:
         :return User:
         """
         if not username or not password:

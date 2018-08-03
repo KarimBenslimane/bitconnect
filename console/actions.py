@@ -1,9 +1,10 @@
 import argparse
+from console.action.bot.create import Create as BotCreate
 from console.action.exchange.create import Create as ExchangeCreate
-from console.action.exchange.list import List as ExchangeList
 from console.action.exchange.delete import Delete as ExchangeDelete
-from console.action.bot.add import Add as BotAdd
+from console.action.exchange.list import List as ExchangeList
 from console.action.user.create import Create as UserCreate
+from console.action.user.delete import Delete as UserDelete
 from console.action.user.list import List as UserList
 from user.login import Login
 
@@ -14,11 +15,12 @@ class Actions:
     def __init__(self):
         # Add new actions here to have them included automatically
         self.actions = [
+            BotCreate(),
             ExchangeCreate(),
-            ExchangeList(),
             ExchangeDelete(),
-            BotAdd(),
+            ExchangeList(),
             UserCreate(),
+            UserDelete(),
             UserList()
         ]
 

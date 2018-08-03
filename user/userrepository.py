@@ -32,9 +32,6 @@ class UserRepository(RepositoryInterface):
                 models.append(model)
         return models
 
-    def save(self, abstractobject):
-        return
-
     def create(self, username, password):
         """
         Create a user in database and retrieve the User
