@@ -8,3 +8,4 @@ class CcxtLibrary:
     def print_exchanges(self):
         for exchange in self.get_exchanges():
             print(exchange)
+#hoi kocken
