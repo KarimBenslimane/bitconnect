@@ -18,5 +18,7 @@ class IndicatorManager:
         btc_datasets = self.dataset_creator.merge_into_single(exchange_data)
         avg_btc_price = self.dataset_creator.get_avg_btc_price_usd(btc_datasets)
         
-        self.indicators = Indicators(btc_datasets, avg_btc_price)
+        self.indicators = Indicators(avg_btc_price, btc_datasets)
+        self.indicators.plot_macd()
+
     
