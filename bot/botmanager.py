@@ -7,13 +7,13 @@ class BotManager:
     def __init__(self):
         self.bot_repo = BotRepository()
 
-    def get_bot(self, id):
+    def get_bot(self, bot_id):
         """
         Retrieve a bot from database by id
-        :param id:
+        :param bot_id:
         :return Bot:
         """
-        return self.bot_repo.get(id)
+        return self.bot_repo.get(bot_id)
 
     def get_bots(self, search_criteria):
         """
@@ -37,9 +37,10 @@ class BotManager:
         for bot in bots:
             self.print_bot(bot)
 
-    def create_bot(self, bot_type, threshold, win_limit, loss_limit, amount):
+    def create_bot(self, bot_type, threshold, win_limit, loss_limit, amount, status):
         """
         Create a new bot in the database
+        :param status:
         :param amount:
         :param loss_limit:
         :param win_limit:
@@ -50,7 +51,7 @@ class BotManager:
         if not bot_type or not threshold or not win_limit or not loss_limit or not amount:
             raise Exception("All data must be given")
         else:
-            return self.bot_repo.create(bot_type, threshold, win_limit, loss_limit, amount)
+            return self.bot_repo.create(bot_type, threshold, win_limit, loss_limit, amount, status)
 
     def delete_bot(self, bot_id):
         """

@@ -1,16 +1,19 @@
 from console.action.baseaction import BaseAction
 from bot.botmanager import BotManager
+from bot.arbitragemanager import ArbitrageManager
 from bot.bot import Bot
 
 
 class Create(BaseAction):
     bot_manager = None
+    arbi_manager = None
 
     def __init__(self):
         super().__init__()
         self.action = 'bot_create'
         self.func = self.execute
         self.bot_manager = BotManager()
+        self.arbi_manager = ArbitrageManager()
         self.flags.append(['-t', '--type'])
         self.flags.append(['-th', '--threshold'])
         self.flags.append(['-w', '--winlimit'])
@@ -30,8 +33,49 @@ class Create(BaseAction):
     def execute(self, args):
         if args.bottype == Bot.TYPE_ARBITRAGE:
             if not args.exchange1 or not args.exchange2:
-                raise Exception("Exchange 1 and exchange 2 arguments must be given.")
+                raise Exception("Exchange 1 and exchange 2 arguments must be given for ARBITRAGE.")
             else:
-                self.bot_manager.create_bot(args.bottype, args.threshold, args.winlimit, args.losslimit, args.amount)
-                # TODO create arbitrage
+                self.create_arbitrage(
+                    args.bottype,
+                    args.threshold,
+                    args.winlimit,
+                    args.losslimit,
+                    args.amount,
+                    args.exchange1,
+                    args.exchange2
+                )
         print("Successfully created the bot")
+
+    def create_bot(self, bottype, threshold, winlimit, losslimit, amount):
+        """
+        Creates a Bot through BotManager
+        :param bottype:
+        :param threshold:
+        :param winlimit:
+        :param losslimit:
+        :param amount:
+        :return Bot:
+        """
+        return self.bot_manager.create_bot(
+            bottype,
+            threshold,
+            winlimit,
+            losslimit,
+            amount,
+            Bot.STATUS_OFF
+        )
+
+    def create_arbitrage(self, bottype, threshold, winlimit, losslimit, amount, exchange1, exchange2):
+        """
+        Creates a Bot and the Arbitrage
+        :param bottype:
+        :param threshold:
+        :param winlimit:
+        :param losslimit:
+        :param amount:
+        :param exchange1:
+        :param exchange2:
+        :return:
+        """
+        bot = self.create_bot(bottype, threshold, winlimit, losslimit, amount)
+        self.arbi_manager.create_arbitrage(bot.get_id(), exchange1, exchange2)
