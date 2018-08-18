@@ -1,3 +1,7 @@
 .idea/
 venv/
 *.pyc
+.spyderproject/
+.spyderproject
+__pycache__
+.DS_Store
