@@ -1,5 +1,7 @@
 import argparse
 from console.action.bot.create import Create as BotCreate
+from console.action.bot.delete import Delete as BotDelete
+from console.action.bot.list import List as BotList
 from console.action.exchange.create import Create as ExchangeCreate
 from console.action.exchange.delete import Delete as ExchangeDelete
 from console.action.exchange.list import List as ExchangeList
@@ -16,6 +18,8 @@ class Actions:
         # Add new actions here to have them included automatically
         self.actions = [
             BotCreate(),
+            BotDelete(),
+            BotList(),
             ExchangeCreate(),
             ExchangeDelete(),
             ExchangeList(),
