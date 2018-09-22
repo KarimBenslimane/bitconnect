@@ -27,8 +27,8 @@ class Create(BaseAction):
         self.arguments.append({'dest': 'winlimit', 'required': True})
         self.arguments.append({'dest': 'losslimit', 'required': True})
         self.arguments.append({'dest': 'amount', 'required': True})
-        self.arguments.append({'dest': 'exchange1'})
-        self.arguments.append({'dest': 'exchange2'})
+        self.arguments.append({'dest': 'exchange1'}) #arbitrage
+        self.arguments.append({'dest': 'exchange2'}) #arbitrage
 
     def execute(self, args):
         if args.bottype == Bot.TYPE_ARBITRAGE:

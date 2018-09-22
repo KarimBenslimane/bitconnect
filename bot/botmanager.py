@@ -1,4 +1,5 @@
 from .botrepository import BotRepository
+from .bot import Bot
 
 
 class BotManager:
@@ -63,3 +64,10 @@ class BotManager:
             self.bot_repo.delete(bot_id)
         else:
             raise Exception("No bot_id found for deleting bot.")
+
+    def get_new_bot(self):
+        """
+        Check if new bot has entered the database with status OFF
+        :return Bot[] | null:
+        """
+        return self.get_bots({Bot.BOT_STATUS: Bot.STATUS_OFF})

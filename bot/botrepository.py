@@ -46,12 +46,12 @@ class BotRepository(RepositoryInterface):
         self.connection.query(
             Connection.TYPE_INSERT,
             {
-                Bot.BOT_TYPE: bot_type,
-                Bot.BOT_THRESHOLD: threshold,
-                Bot.BOT_WIN_LIMIT: win_limit,
-                Bot.BOT_LOSS_LIMIT: loss_limit,
-                Bot.BOT_AMOUNT: amount,
-                Bot.BOT_STATUS: status
+                Bot.BOT_TYPE: str(bot_type),
+                Bot.BOT_THRESHOLD: float(threshold),
+                Bot.BOT_WIN_LIMIT: int(win_limit),
+                Bot.BOT_LOSS_LIMIT: int(loss_limit),
+                Bot.BOT_AMOUNT: float(amount),
+                Bot.BOT_STATUS: str(status)
             }
         )
         # TODO: maybe replace last_insert_id with something specific
