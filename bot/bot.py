@@ -5,8 +5,15 @@ class Bot:
     BOT_WIN_LIMIT = 'win_limit'
     BOT_LOSS_LIMIT = 'loss_limit'
     BOT_AMOUNT = 'amount'
+    BOT_CREATED_AT = 'created_at'
+    BOT_STATUS = 'status'
 
     TYPE_ARBITRAGE = 'arbitrage'
+
+    STATUS_ON = 'on'
+    STATUS_OFF = 'off'
+    STATUS_ERROR = 'error'
+    STATUS_CANCELED = 'canceled'
 
     id = ''
     bot_type = ''
@@ -14,6 +21,8 @@ class Bot:
     win_limit = ''
     loss_limit = ''
     amount = ''
+    created_at = ''
+    status = ''
 
     def set_id(self, id):
         self.id = id
@@ -38,6 +47,12 @@ class Bot:
     def set_amount(self, amount):
         self.amount = amount
 
+    def set_created_at(self, created_at):
+        self.created_at = created_at
+
+    def set_status(self, status):
+        self.status = status
+
     def get_id(self):
         return self.id
 
@@ -56,3 +71,8 @@ class Bot:
     def get_amount(self):
         return self.amount
 
+    def get_created_at(self):
+        return self.created_at
+
+    def get_status(self):
+        return self.status
