@@ -1,5 +1,5 @@
 from .arbitragerepository import ArbitrageRepository
-
+from .arbitrage import Arbitrage
 
 class ArbitrageManager:
     arbi_repo = None
@@ -25,7 +25,7 @@ class ArbitrageManager:
     def print_arbitrage(self, arbitrage):
         """
         Print Arbitrage info
-        :param arbitrage:
+        :param Arbitrage:
         """
         print(arbitrage.get_id())
         print(arbitrage.get_exchange_one())
@@ -54,3 +54,27 @@ class ArbitrageManager:
             self.arbi_repo.delete(bot_id)
         else:
             raise Exception("No bot_id found for deleting arbitrage.")
+
+    def get_bot_dict(self, bot):
+        """
+        Get all the info of an arbitrage bot
+        :param bot:
+        :return {}:
+        """
+        arbitrage = self.get_arbitrage(bot.get_id())
+        if not arbitrage:
+            raise Exception("No arbitrage bot found")
+        else:
+            bot_dict = {
+                "id": str(bot.get_id()),
+                "threshold": str(bot.get_threshold()),
+                "win_limit": str(bot.get_win_limit()),
+                "loss_limit": str(bot.get_loss_limit()),
+                "type": str(bot.get_type()),
+                "amount": str(bot.get_amount()),
+                "created_at": str(bot.get_created_at()),
+                "status": str(bot.get_status()),
+                "exchange_one": str(arbitrage.get_exchange_one()),
+                "exchange_two": str(arbitrage.get_exchange_two())
+            }
+            return bot_dict

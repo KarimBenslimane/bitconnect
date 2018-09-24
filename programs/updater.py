@@ -1,12 +1,18 @@
+from bot.arbitragemanager import ArbitrageManager
 from bot.botmanager import BotManager
 from bot.bot import Bot
+from helpers.logger import Logger
+import json
+import traceback
 import subprocess
 
+#TODO: add argument for test setup
+#TODO: make loop
 def update():
     print('starting updater....')
-    #while true until application is closed
-    kill = False
+    logger = Logger("updater")
     botmanager = BotManager()
+    arbitragemanager = ArbitrageManager()
     # while not kill:
     print('waiting for bots')
     #check database for new bot
@@ -14,14 +20,18 @@ def update():
     if new_bots:
         print('new bot found')
         #TODO: choose subprocess
-        #start each bot and create subprocesses per type bot or exchange?
+        #start each bot and create subprocesses per type bot?
         for bot in new_bots:
-            type = bot.get_type()
-            if type == Bot.TYPE_ARBITRAGE:
-                #add this bot to the arbitrage subprocess
-                subprocess.run(["/usr/bin/python3", "/var/www/bitconnect/processes/process.py"])
-                subprocess.run(["/usr/bin/python3", "/var/www/bitconnect/processes/process.py"])
-
+            try:
+                type = bot.get_type()
+                bot_dict = None
+                if type == Bot.TYPE_ARBITRAGE:
+                    bot_dict = arbitragemanager.get_bot_dict(bot)
+                args = json.dumps(bot_dict)
+                subprocess.run(["/usr/bin/python3", "/var/www/bitconnect/processes/process.py", args])
+            except Exception as e:
+                logger.info(str(e))
+                logger.info(traceback.format_exc())
     #loop through
 
 

@@ -1,12 +1,15 @@
 from .botrepository import BotRepository
 from .bot import Bot
+from exchanges.ccxtlibrary import CcxtLibrary
 
 
 class BotManager:
     bot_repo = None
+    ccxt = None
 
     def __init__(self):
         self.bot_repo = BotRepository()
+        self.ccxt = CcxtLibrary()
 
     def get_bot(self, bot_id):
         """
@@ -38,7 +41,7 @@ class BotManager:
         for bot in bots:
             self.print_bot(bot)
 
-    def create_bot(self, bot_type, threshold, win_limit, loss_limit, amount, status):
+    def create_bot(self, pair, bot_type, threshold, win_limit, loss_limit, amount, status):
         """
         Create a new bot in the database
         :param status:
@@ -52,7 +55,7 @@ class BotManager:
         if not bot_type or not threshold or not win_limit or not loss_limit or not amount:
             raise Exception("All data must be given")
         else:
-            return self.bot_repo.create(bot_type, threshold, win_limit, loss_limit, amount, status)
+            return self.bot_repo.create(pair, bot_type, threshold, win_limit, loss_limit, amount, status)
 
     def delete_bot(self, bot_id):
         """
@@ -71,3 +74,12 @@ class BotManager:
         :return Bot[] | null:
         """
         return self.get_bots({Bot.BOT_STATUS: Bot.STATUS_OFF})
+
+    def is_valid_pair(self, pair, market):
+        """
+        Checks if an input pair is a valid one
+        :param pair:
+        :return bool:
+        """
+        pairs = self.ccxt.get_pairs(market)
+        return pair in pairs

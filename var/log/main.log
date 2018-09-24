@@ -1,0 +1,14 @@
+2018-09-24 13:06:40,453 - main - ERROR - module 'ccxt' has no attribute 'market'
+2018-09-24 13:06:40,454 - main - ERROR - Traceback (most recent call last):
+  File "/var/www/bitconnect/console/actions.py", line 59, in execute
+    args.func(args)
+  File "/var/www/bitconnect/console/action/bot/create.py", line 39, in execute
+    if not self.valid_pairs(args.pair, args.exchange1, args.exchange2):
+  File "/var/www/bitconnect/console/action/bot/create.py", line 88, in valid_pairs
+    self.bot_manager.is_valid_pair(pair, e_one)
+  File "/var/www/bitconnect/bot/botmanager.py", line 84, in is_valid_pair
+    print(self.ccxt.get_pairs(market))
+  File "/var/www/bitconnect/exchanges/ccxtlibrary.py", line 13, in get_pairs
+    return ccxt.market.load_markets()
+AttributeError: module 'ccxt' has no attribute 'market'
+

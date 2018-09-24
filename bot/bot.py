@@ -7,6 +7,7 @@ class Bot:
     BOT_AMOUNT = 'amount'
     BOT_CREATED_AT = 'created_at'
     BOT_STATUS = 'status'
+    BOT_PAIR = 'pair'
 
     TYPE_ARBITRAGE = 'arbitrage'
 
@@ -23,6 +24,7 @@ class Bot:
     amount = ''
     created_at = ''
     status = ''
+    pair = ''
 
     def set_id(self, id):
         self.id = id
@@ -53,6 +55,9 @@ class Bot:
     def set_status(self, status):
         self.status = status
 
+    def set_pair(self, pair):
+        self.pair = pair
+
     def get_id(self):
         return self.id
 
@@ -76,3 +81,6 @@ class Bot:
 
     def get_status(self):
         return self.status
+
+    def get_pair(self):
+        return self.pair

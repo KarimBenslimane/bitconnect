@@ -1,0 +1,8 @@
+2018-09-24 12:07:14,729 - updater - ERROR - No arbitrage bot found
+2018-09-24 12:07:14,729 - updater - ERROR - Traceback (most recent call last):
+  File "programs/updater.py", line 29, in update
+    bot_dict = arbitragemanager.get_bot_dict(bot)
+  File "/var/www/bitconnect/bot/arbitragemanager.py", line 64, in get_bot_dict
+    raise Exception("No arbitrage bot found")
+Exception: No arbitrage bot found
+

@@ -9,13 +9,20 @@ from console.action.user.create import Create as UserCreate
 from console.action.user.delete import Delete as UserDelete
 from console.action.user.list import List as UserList
 from user.login import Login
+from helpers.logger import Logger
+import traceback
 
 
 class Actions:
     login = None
+    logger = Logger("main")
 
     def __init__(self):
-        # Add new actions here to have them included automatically
+        """
+        Add new actions here to have them included automatically
+        Sets up class variables for the parsers, subparsers array has the filled parsers for each action
+        Set up all the actions in the parsers and then execute the correct action
+        """
         self.actions = [
             BotCreate(),
             BotDelete(),
@@ -27,30 +34,30 @@ class Actions:
             UserDelete(),
             UserList()
         ]
-
-        # Sets up class variables for the parsers, subparsers array has the filled parsers for each action
         self.login = Login()
         self.parser = None
         self.subparser = None
         self.subparsers = []
-
-        # Set up all the actions in the parsers and then execute the correct action
         self.set_up()
         self.execute()
 
     def set_up(self):
-        # Set up parser and create subparser
+        """
+        Set up parser and create subparser
+        Add each actions arguments and store its particular subparser
+        """
+        # TODO is storing this 'new' subparser needed?
         self.parser = argparse.ArgumentParser()
         self.subparser = self.parser.add_subparsers()
 
-        # Add each actions arguments and store its particular subparser
-        # TODO is storing this 'new' subparser needed?
         for i in range(len(self.actions)):
             self.subparsers.append(self.actions[i].init(self.subparser))
 
     def execute(self):
+        """
+        Parse the given arguments and execute the correct action after checking login
+        """
         try:
-            # Parse the given arguments and execute the correct action after checking login
             args = self.parser.parse_args()
             if self.login.check_login(username=args.username, password=args.password):
                 args.func(args)
@@ -60,3 +67,5 @@ class Actions:
             template = "An exception of type {0} occurred. Arguments:\n{1!r}"
             message = template.format(type(ex).__name__, ex.args)
             print(message)
+            self.logger.info(str(ex))
+            self.logger.info(traceback.format_exc())

@@ -32,7 +32,7 @@ class BotRepository(RepositoryInterface):
                 models.append(model)
         return models
 
-    def create(self, bot_type, threshold, win_limit, loss_limit, amount, status):
+    def create(self, pair, bot_type, threshold, win_limit, loss_limit, amount, status):
         """
         Create a bot in database and retrieve the Bot model
         :param status:
@@ -46,6 +46,7 @@ class BotRepository(RepositoryInterface):
         self.connection.query(
             Connection.TYPE_INSERT,
             {
+                Bot.BOT_PAIR: str(pair),
                 Bot.BOT_TYPE: str(bot_type),
                 Bot.BOT_THRESHOLD: float(threshold),
                 Bot.BOT_WIN_LIMIT: int(win_limit),
@@ -73,6 +74,7 @@ class BotRepository(RepositoryInterface):
         model.set_amount(data[5])
         model.set_created_at(data[6])
         model.set_status(data[7])
+        model.set_pair(data[8])
         return model
 
     def delete(self, bot_id):

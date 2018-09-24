@@ -18,3 +18,9 @@ class Arbitrage:
     def set_exchange_two(self, exchange):
         self.exchange_two = exchange
         return self
+
+    def get_exchange_one(self):
+        return self.exchange_one
+
+    def get_exchange_two(self):
+        return self.exchange_two
