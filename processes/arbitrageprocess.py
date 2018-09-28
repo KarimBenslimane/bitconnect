@@ -81,7 +81,8 @@ class ArbitrageProcess():
             self.exchange_two,
             self.botParams["pair"]
         )
-        if float(balance_one) >= float(self.BALANCE_LIMIT) and float(balance_two) >= float(self.BALANCE_LIMIT):
+        if balance_one and balance_two and float(balance_one) >= float(self.BALANCE_LIMIT) and float(
+                balance_two) >= float(self.BALANCE_LIMIT):
             return True
         else:
             raise Exception(
