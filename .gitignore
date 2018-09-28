@@ -5,3 +5,4 @@ venv/
 .spyderproject
 __pycache__
 .DS_Store
+var/log/*

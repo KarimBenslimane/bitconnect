@@ -41,7 +41,7 @@ class ExchangeManager:
         for exchange in exchanges:
             self.print_exchange(exchange)
 
-    def create_exchange(self, exchangename, public_key, private_key, user_id):
+    def create_exchange(self, exchangename, public_key, private_key, user_id, uid = None, pw = None):
         """
         Create a new exchange in the database
         :param exchangename:
@@ -53,7 +53,7 @@ class ExchangeManager:
         if not exchangename or not public_key or not private_key:
             raise Exception("Exchangename, public key and private key must be given")
         else:
-            return self.exch_repo.create(exchangename, public_key, private_key, user_id)
+            return self.exch_repo.create(exchangename, public_key, private_key, user_id, uid, pw)
 
     def delete_exchange(self, exchange_id):
         """

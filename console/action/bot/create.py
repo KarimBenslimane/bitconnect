@@ -2,11 +2,13 @@ from console.action.baseaction import BaseAction
 from bot.botmanager import BotManager
 from bot.arbitragemanager import ArbitrageManager
 from bot.bot import Bot
+from user.usermanager import UserManager
 
 
 class Create(BaseAction):
     bot_manager = None
     arbi_manager = None
+    user_manager = None
 
     def __init__(self):
         super().__init__()
@@ -14,6 +16,7 @@ class Create(BaseAction):
         self.func = self.execute
         self.bot_manager = BotManager()
         self.arbi_manager = ArbitrageManager()
+        self.user_manager = UserManager()
         self.flags.append(['-pa', '--pair'])
         self.flags.append(['-t', '--type'])
         self.flags.append(['-th', '--threshold'])
@@ -33,6 +36,7 @@ class Create(BaseAction):
         self.arguments.append({'dest': 'exchange2'}) #arbitrage
 
     def execute(self, args):
+        user_id = self.user_manager.get_user_by_username(args.username)
         if args.bottype == Bot.TYPE_ARBITRAGE:
             if not args.exchange1 or not args.exchange2:
                 raise Exception("Exchange 1 and exchange 2 arguments must be given for ARBITRAGE.")
@@ -47,11 +51,12 @@ class Create(BaseAction):
                     args.losslimit,
                     args.amount,
                     args.exchange1,
-                    args.exchange2
+                    args.exchange2,
+                    user_id
                 )
         print("Successfully created the bot")
 
-    def create_bot(self, pair, bottype, threshold, winlimit, losslimit, amount):
+    def create_bot(self, pair, bottype, threshold, winlimit, losslimit, amount, user_id):
         """
         Creates a Bot through BotManager
         :param bottype:
@@ -68,10 +73,11 @@ class Create(BaseAction):
             winlimit,
             losslimit,
             amount,
-            Bot.STATUS_OFF
+            Bot.STATUS_OFF,
+            user_id
         )
 
-    def create_arbitrage(self, pair, bottype, threshold, winlimit, losslimit, amount, exchange1, exchange2):
+    def create_arbitrage(self, pair, bottype, threshold, winlimit, losslimit, amount, exchange1, exchange2, user_id):
         """
         Creates a Bot and the Arbitrage
         :param bottype:
@@ -83,7 +89,7 @@ class Create(BaseAction):
         :param exchange2:
         :return:
         """
-        bot = self.create_bot(pair, bottype, threshold, winlimit, losslimit, amount)
+        bot = self.create_bot(pair, bottype, threshold, winlimit, losslimit, amount, user_id)
         self.arbi_manager.create_arbitrage(bot.get_id(), exchange1, exchange2)
 
     def valid_pairs(self, pair, e_one, e_two):

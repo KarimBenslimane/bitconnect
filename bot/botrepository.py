@@ -32,7 +32,7 @@ class BotRepository(RepositoryInterface):
                 models.append(model)
         return models
 
-    def create(self, pair, bot_type, threshold, win_limit, loss_limit, amount, status):
+    def create(self, pair, bot_type, threshold, win_limit, loss_limit, amount, status, user_id):
         """
         Create a bot in database and retrieve the Bot model
         :param status:
@@ -52,7 +52,8 @@ class BotRepository(RepositoryInterface):
                 Bot.BOT_WIN_LIMIT: int(win_limit),
                 Bot.BOT_LOSS_LIMIT: int(loss_limit),
                 Bot.BOT_AMOUNT: float(amount),
-                Bot.BOT_STATUS: str(status)
+                Bot.BOT_STATUS: str(status),
+                Bot.BOT_USERID: int(user_id)
             }
         )
         # TODO: maybe replace last_insert_id with something specific
@@ -75,6 +76,7 @@ class BotRepository(RepositoryInterface):
         model.set_created_at(data[6])
         model.set_status(data[7])
         model.set_pair(data[8])
+        model.set_userid(data[9])
         return model
 
     def delete(self, bot_id):

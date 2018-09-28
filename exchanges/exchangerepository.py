@@ -32,7 +32,7 @@ class ExchangeRepository(RepositoryInterface):
                 models.append(model)
         return models
 
-    def create(self, exchangename, public_key, private_key, user_id):
+    def create(self, exchangename, public_key, private_key, user_id, uid, pw):
         """
         Create an exchange in database and retrieve the Exchange
         :param exchangename:
@@ -46,7 +46,9 @@ class ExchangeRepository(RepositoryInterface):
                 Exchange.EXCHANGE_NAME: exchangename,
                 Exchange.EXCHANGE_PUBLIC: public_key,
                 Exchange.EXCHANGE_PRIVATE: private_key,
-                Exchange.EXCHANGE_USER: user_id
+                Exchange.EXCHANGE_USER: user_id,
+                Exchange.EXCHANGE_UID: uid,
+                Exchange.EXCHANGE_PW: pw
             }
         )
         # TODO: maybe replace last_insert_id with something specific
@@ -65,6 +67,8 @@ class ExchangeRepository(RepositoryInterface):
         model.set_public(data[2])
         model.set_private(data[3])
         model.set_user_id(data[4])
+        model.set_uid(data[5])
+        model.set_pw(data[6])
         return model
 
     def delete(self, exchange_id):

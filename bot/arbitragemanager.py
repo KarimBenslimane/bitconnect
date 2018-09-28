@@ -55,7 +55,7 @@ class ArbitrageManager:
         else:
             raise Exception("No bot_id found for deleting arbitrage.")
 
-    def get_bot_dict(self, bot):
+    def  get_bot_dict(self, bot):
         """
         Get all the info of an arbitrage bot
         :param bot:
@@ -74,7 +74,9 @@ class ArbitrageManager:
                 "amount": str(bot.get_amount()),
                 "created_at": str(bot.get_created_at()),
                 "status": str(bot.get_status()),
+                "user_id": str(bot.get_userid()),
                 "exchange_one": str(arbitrage.get_exchange_one()),
-                "exchange_two": str(arbitrage.get_exchange_two())
+                "exchange_two": str(arbitrage.get_exchange_two()),
+                "pair": str(bot.get_pair())
             }
             return bot_dict

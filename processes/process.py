@@ -1,5 +1,5 @@
 from bot.bot import Bot
-from .arbitrageprocess import ArbitrageProcess
+from processes.arbitrageprocess import ArbitrageProcess
 import sys
 import json
 
