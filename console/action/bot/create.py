@@ -2,13 +2,16 @@ from console.action.baseaction import BaseAction
 from bot.botmanager import BotManager
 from bot.arbitragemanager import ArbitrageManager
 from bot.bot import Bot
+from exchanges.exchange import Exchange
 from user.usermanager import UserManager
+from exchanges.exchangemanager import ExchangeManager
 
 
 class Create(BaseAction):
     bot_manager = None
     arbi_manager = None
     user_manager = None
+    exchange_manager = None
 
     def __init__(self):
         super().__init__()
@@ -17,6 +20,7 @@ class Create(BaseAction):
         self.bot_manager = BotManager()
         self.arbi_manager = ArbitrageManager()
         self.user_manager = UserManager()
+        self.exchange_manager = ExchangeManager()
         self.flags.append(['-pa', '--pair'])
         self.flags.append(['-t', '--type'])
         self.flags.append(['-th', '--threshold'])
@@ -36,11 +40,14 @@ class Create(BaseAction):
         self.arguments.append({'dest': 'exchange2'}) #arbitrage
 
     def execute(self, args):
-        user_id = self.user_manager.get_user_by_username(args.username)
+        users = self.user_manager.get_user_by_username(args.username)
+        if not users or not users[0].get_id():
+            raise Exception("User cannot be found.")
+        user_id = users[0].get_id()
         if args.bottype == Bot.TYPE_ARBITRAGE:
             if not args.exchange1 or not args.exchange2:
                 raise Exception("Exchange 1 and exchange 2 arguments must be given for ARBITRAGE.")
-            if not self.valid_pairs(str(args.pair), args.exchange1, args.exchange2):
+            if not self.valid_pairs(str(args.pair), args.exchange1, args.exchange2, user_id):
                 raise Exception("Crypto pair not valid. (example: BTC/ETH)")
             else:
                 self.create_arbitrage(
@@ -92,12 +99,21 @@ class Create(BaseAction):
         bot = self.create_bot(pair, bottype, threshold, winlimit, losslimit, amount, user_id)
         self.arbi_manager.create_arbitrage(bot.get_id(), exchange1, exchange2)
 
-    def valid_pairs(self, pair, e_one, e_two):
+    def valid_pairs(self, pair, e_one, e_two, user_id):
         """
-        Check for both exchanges if the pair exists, otherwise we cannot make the bot
+        Check for (all) exchanges if the pairs exist
         :param pair:
         :param e_one:
         :param e_two:
         :return bool:
         """
-        return self.bot_manager.is_valid_pair(pair, e_one) and self.bot_manager.is_valid_pair(pair, e_two)
+        exchanges = []
+        if e_one or e_two == "all":
+            exchanges = self.exchange_manager.get_exchanges({Exchange.EXCHANGE_USER: user_id})
+        else:
+            exchanges.append(self.exchange_manager.get_exchanges({Exchange.EXCHANGE_USER: user_id, Exchange.EXCHANGE_NAME: e_one}))
+            exchanges.append(self.exchange_manager.get_exchanges({Exchange.EXCHANGE_USER: user_id, Exchange.EXCHANGE_NAME: e_two}))
+        for exchange in exchanges:
+            if not self.exchange_manager.is_valid_pair(pair, exchange):
+                return False
+        return True

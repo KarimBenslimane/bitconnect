@@ -13,25 +13,23 @@ def update():
     logger = Logger("updater")
     botmanager = BotManager()
     arbitragemanager = ArbitrageManager()
+    active = True
     # while not kill:
-    print('waiting for bots')
-    #check database for new bot
-    new_bots = botmanager.get_new_bot()
-    if new_bots:
-        print('new bot found')
-        #TODO: choose subprocess
-        #start each bot and create subprocesses per type bot?
-        for bot in new_bots:
-            try:
-                type = bot.get_type()
-                bot_dict = None
-                if type == Bot.TYPE_ARBITRAGE:
-                    bot_dict = arbitragemanager.get_bot_dict(bot)
-                args = json.dumps(bot_dict)
-                subprocess.run(["/usr/bin/python3", "/var/www/bitconnect/processes/process.py", args])
-            except Exception as e:
-                logger.info(str(e))
-                logger.info(traceback.format_exc())
+    while active:
+        print('waiting for bots')
+        #check database for new bot
+        new_bots = botmanager.get_new_bot()
+        if new_bots:
+            print('new bot found')
+            #TODO: choose subprocess
+            #start each bot and create subprocesses per type bot?
+            for bot in new_bots:
+                try:
+                    args = json.dumps({Bot.BOT_ID: bot.get_id(), Bot.BOT_TYPE: bot.get_type()})
+                    subprocess.run(["/usr/bin/python3", "/var/www/bitconnect/processes/process.py", args])
+                except Exception as e:
+                    logger.info(str(e))
+                    logger.info(traceback.format_exc())
     #loop through
 
 

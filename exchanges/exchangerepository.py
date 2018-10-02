@@ -15,7 +15,7 @@ class ExchangeRepository(RepositoryInterface):
         :param id:
         :return Exchange:
         """
-        exchange_data = self.connection.query(Connection.TYPE_SELECT, {Exchange.EXCHANGE_ID: id})
+        exchange_data = self.connection.query(Connection.TYPE_SELECT, [Exchange.EXCHANGE_ID], [id])
         return self.create_model(exchange_data)
 
     def getList(self, search_criteria):
@@ -24,7 +24,12 @@ class ExchangeRepository(RepositoryInterface):
         :param search_criteria:
         :return Exchange[]:
         """
-        exchange_data = self.connection.query_all(Connection.TYPE_SELECT, search_criteria)
+        keys = []
+        values = []
+        for key, value in search_criteria.items():
+            keys.append(key)
+            values.append(value)
+        exchange_data = self.connection.query_all(Connection.TYPE_SELECT, keys, values)
         models = []
         if exchange_data:
             for exchange in exchange_data:
@@ -42,14 +47,22 @@ class ExchangeRepository(RepositoryInterface):
         """
         self.connection.query(
             Connection.TYPE_INSERT,
-            {
-                Exchange.EXCHANGE_NAME: exchangename,
-                Exchange.EXCHANGE_PUBLIC: public_key,
-                Exchange.EXCHANGE_PRIVATE: private_key,
-                Exchange.EXCHANGE_USER: user_id,
-                Exchange.EXCHANGE_UID: uid,
-                Exchange.EXCHANGE_PW: pw
-            }
+            [
+                Exchange.EXCHANGE_NAME,
+                Exchange.EXCHANGE_PUBLIC,
+                Exchange.EXCHANGE_PRIVATE,
+                Exchange.EXCHANGE_USER,
+                Exchange.EXCHANGE_UID,
+                Exchange.EXCHANGE_PW
+            ],
+            [
+                exchangename,
+                public_key,
+                private_key,
+                user_id,
+                uid,
+                pw
+            ]
         )
         # TODO: maybe replace last_insert_id with something specific
         # TODO: when many people will use the system to avoid wrong ids return
@@ -78,7 +91,6 @@ class ExchangeRepository(RepositoryInterface):
         """
         self.connection.query(
             Connection.TYPE_DELETE,
-            {
-                Exchange.EXCHANGE_ID: exchange_id
-            }
+            [Exchange.EXCHANGE_ID],
+            [exchange_id]
         )

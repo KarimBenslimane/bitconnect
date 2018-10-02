@@ -1,15 +1,12 @@
 from .botrepository import BotRepository
 from .bot import Bot
-from exchanges.ccxtlibrary import CcxtLibrary
 
 
 class BotManager:
     bot_repo = None
-    ccxt = None
 
     def __init__(self):
         self.bot_repo = BotRepository()
-        self.ccxt = CcxtLibrary()
 
     def get_bot(self, bot_id):
         """
@@ -68,18 +65,17 @@ class BotManager:
         else:
             raise Exception("No bot_id found for deleting bot.")
 
+    def update_bot(self, bot):
+        """
+        Updates a bot with certain criteria
+        :param Bot bot:
+        :return:
+        """
+        return self.bot_repo.update(bot)
+
     def get_new_bot(self):
         """
         Check if new bot has entered the database with status OFF
         :return Bot[] | null:
         """
         return self.get_bots({Bot.BOT_STATUS: Bot.STATUS_OFF})
-
-    def is_valid_pair(self, pair, exchange):
-        """
-        Checks if an input pair is a valid one for given exchange
-        :param pair:
-        :return bool:
-        """
-        pairs = self.ccxt.get_pairs(exchange)
-        return pair in pairs

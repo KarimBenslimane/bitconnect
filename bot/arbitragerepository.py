@@ -15,7 +15,7 @@ class ArbitrageRepository(RepositoryInterface):
         :param id:
         :return Arbitrage:
         """
-        bot_data = self.connection.query(Connection.TYPE_SELECT, {Arbitrage.ARBITRAGE_BOT: id})
+        bot_data = self.connection.query(Connection.TYPE_SELECT, [Arbitrage.ARBITRAGE_BOT], [id])
         return self.create_model(bot_data)
 
     def getList(self, search_criteria):
@@ -24,7 +24,12 @@ class ArbitrageRepository(RepositoryInterface):
         :param search_criteria:
         :return Arbitrage[]:
         """
-        bot_data = self.connection.query_all(Connection.TYPE_SELECT, search_criteria)
+        keys = []
+        values = []
+        for key, value in search_criteria.items():
+            keys.append(key)
+            values.append(value)
+        bot_data = self.connection.query_all(Connection.TYPE_SELECT, keys, values)
         models = []
         if bot_data:
             for bot in bot_data:
@@ -42,11 +47,8 @@ class ArbitrageRepository(RepositoryInterface):
         """
         self.connection.query(
             Connection.TYPE_INSERT,
-            {
-                Arbitrage.ARBITRAGE_BOT: bot_id,
-                Arbitrage.ARBITRAGE_E1: exchange1,
-                Arbitrage.ARBITRAGE_E2: exchange2
-            }
+            [Arbitrage.ARBITRAGE_BOT, Arbitrage.ARBITRAGE_E1, Arbitrage.ARBITRAGE_E2],
+            [bot_id, exchange1, exchange2]
         )
         return self.get(bot_id)
 
@@ -69,7 +71,6 @@ class ArbitrageRepository(RepositoryInterface):
         """
         self.connection.query(
             Connection.TYPE_DELETE,
-            {
-                Arbitrage.ARBITRAGE_BOT: bot_id
-            }
+            [Arbitrage.ARBITRAGE_BOT],
+            [bot_id]
         )

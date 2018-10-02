@@ -16,6 +16,7 @@ class Bot:
     STATUS_OFF = 'off'
     STATUS_ERROR = 'error'
     STATUS_CANCELED = 'canceled'
+    STATUS_FINISHED = 'finished'
 
     id = ''
     bot_type = ''

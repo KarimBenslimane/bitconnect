@@ -15,7 +15,7 @@ class BotRepository(RepositoryInterface):
         :param id:
         :return Bot:
         """
-        bot_data = self.connection.query(Connection.TYPE_SELECT, {Bot.BOT_ID: id})
+        bot_data = self.connection.query(Connection.TYPE_SELECT, [Bot.BOT_ID], [id])
         return self.create_model(bot_data)
 
     def getList(self, search_criteria):
@@ -24,7 +24,12 @@ class BotRepository(RepositoryInterface):
         :param search_criteria:
         :return Bot[]:
         """
-        bot_data = self.connection.query_all(Connection.TYPE_SELECT, search_criteria)
+        keys = []
+        values = []
+        for key, value in search_criteria.items():
+            keys.append(key)
+            values.append(value)
+        bot_data = self.connection.query_all(Connection.TYPE_SELECT, keys, values)
         models = []
         if bot_data:
             for bot in bot_data:
@@ -45,16 +50,26 @@ class BotRepository(RepositoryInterface):
         """
         self.connection.query(
             Connection.TYPE_INSERT,
-            {
-                Bot.BOT_PAIR: str(pair),
-                Bot.BOT_TYPE: str(bot_type),
-                Bot.BOT_THRESHOLD: float(threshold),
-                Bot.BOT_WIN_LIMIT: int(win_limit),
-                Bot.BOT_LOSS_LIMIT: int(loss_limit),
-                Bot.BOT_AMOUNT: float(amount),
-                Bot.BOT_STATUS: str(status),
-                Bot.BOT_USERID: int(user_id)
-            }
+            [
+                Bot.BOT_PAIR,
+                Bot.BOT_TYPE,
+                Bot.BOT_THRESHOLD,
+                Bot.BOT_WIN_LIMIT,
+                Bot.BOT_LOSS_LIMIT,
+                Bot.BOT_AMOUNT,
+                Bot.BOT_STATUS,
+                Bot.BOT_USERID
+            ],
+            [
+                str(pair),
+                str(bot_type),
+                float(threshold),
+                float(win_limit),
+                float(loss_limit),
+                float(amount),
+                str(status),
+                int(user_id)
+            ]
         )
         # TODO: maybe replace last_insert_id with something specific
         # TODO: when many people will use the system to avoid wrong ids return
@@ -86,7 +101,43 @@ class BotRepository(RepositoryInterface):
         """
         self.connection.query(
             Connection.TYPE_DELETE,
-            {
-                Bot.BOT_ID: bot_id
-            }
+            [Bot.BOT_ID],
+            [bot_id]
         )
+
+    def update(self, bot):
+        """
+        Update a bot from the database with new values and returns a new model
+        :param Bot bot:
+        :return Bot bot:
+        """
+        self.connection.query(
+            Connection.TYPE_UPDATE,
+            {
+                "values": [
+                    Bot.BOT_PAIR,
+                    Bot.BOT_TYPE,
+                    Bot.BOT_THRESHOLD,
+                    Bot.BOT_WIN_LIMIT,
+                    Bot.BOT_LOSS_LIMIT,
+                    Bot.BOT_AMOUNT,
+                    Bot.BOT_STATUS,
+                    Bot.BOT_USERID
+                ],
+                "identifier": [
+                    Bot.BOT_ID
+                ]
+            },
+            [
+                str(bot.get_pair()),
+                str(bot.get_type()),
+                float(bot.get_threshold()),
+                float(bot.get_win_limit()),
+                float(bot.get_loss_limit()),
+                float(bot.get_amount()),
+                str(bot.get_status()),
+                int(bot.get_userid()),
+                int(bot.get_id())
+            ]
+        )
+        return self.get(bot.get_id())

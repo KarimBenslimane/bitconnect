@@ -15,7 +15,7 @@ class UserRepository(RepositoryInterface):
         :param id:
         :return User:
         """
-        user_data = self.connection.query(Connection.TYPE_SELECT, {User.USER_ID: id})
+        user_data = self.connection.query(Connection.TYPE_SELECT, [User.USER_ID], [id])
         return self.create_model(user_data)
 
     def getList(self, search_criteria):
@@ -24,7 +24,12 @@ class UserRepository(RepositoryInterface):
         :param search_criteria:
         :return User[]:
         """
-        user_data = self.connection.query_all(Connection.TYPE_SELECT, search_criteria)
+        keys = []
+        values = []
+        for key, value in search_criteria.items():
+            keys.append(key)
+            values.append(value)
+        user_data = self.connection.query_all(Connection.TYPE_SELECT, keys, values)
         models = []
         if user_data:
             for user in user_data:
@@ -41,7 +46,14 @@ class UserRepository(RepositoryInterface):
         """
         self.connection.query(
             Connection.TYPE_INSERT,
-            {User.USER_NAME: username, User.USER_PASSWORD: password}
+            [
+                User.USER_NAME,
+                User.USER_PASSWORD
+            ],
+            [
+                username,
+                password
+            ]
         )
         # TODO: maybe replace last_insert_id with something specific
         # TODO: when many people will use the system to avoid wrong ids return
@@ -66,7 +78,6 @@ class UserRepository(RepositoryInterface):
         """
         self.connection.query(
             Connection.TYPE_DELETE,
-            {
-                User.USER_ID: user_id
-            }
+            [User.USER_ID],
+            [user_id]
         )

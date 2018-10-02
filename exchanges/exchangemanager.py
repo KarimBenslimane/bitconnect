@@ -1,11 +1,14 @@
 from .exchangerepository import ExchangeRepository
 from .exchange import Exchange
+from exchanges.ccxtlibrary import CcxtLibrary
 
 class ExchangeManager:
     exch_repo = None
+    ccxt = None
 
     def __init__(self):
         self.exch_repo = ExchangeRepository()
+        self.ccxt = CcxtLibrary()
 
     def get_exchange(self, id):
         """
@@ -65,3 +68,64 @@ class ExchangeManager:
             self.exch_repo.delete(exchange_id=exchange_id)
         else:
             raise Exception("No exchange_id found for deleting exchange.")
+
+    def is_valid_pair(self, pair, exchange):
+        """
+        Checks if an input pair is a valid one for given exchange
+        :param exchange:
+        :param pair:
+        :return bool:
+        """
+        pairs = self.ccxt.get_pairs(exchange)
+        return pair in pairs
+
+    def fetch_balance(self, exchange, pair):
+        """
+        Fetches balance for a pair on an exchange through CCXT
+        :param exchange:
+        :param pair:
+        :return:
+        """
+        return self.ccxt.fetch_balance(exchange, pair)
+
+    def get_exchange_trading_fee(self, exchange, pair, type):
+        """
+        Retrieves the trading fee for a certain pair on a certain exchange
+        :param exchange:
+        :param pair:
+        :param type:
+        :return:
+        """
+        return self.ccxt.get_exchange_trading_fee(exchange, pair, type)
+
+    def get_market_price(self, exchange, pair, type):
+        """
+        Retrieves the market price for a certain pair on a certain exchange for a certain type(maker or taker)
+        :param exchange:
+        :param pair:
+        :param type:
+        :return:
+        """
+        return self.ccxt.get_market_price(exchange, pair, type)
+
+    def place_order(self, exchange, pair, type, amount, price):
+        """
+        Place an order through the ccxt library for a certain exchange,
+        for a certain pair (BTC/USD), type as buy/sell, and amount in currency (if BTC/USD will be BTC)
+        :param price:
+        :param exchange:
+        :param pair:
+        :param type:
+        :param amount:
+        :return:
+        """
+        return self.ccxt.place_order(exchange, pair, type, amount, price)
+
+    def cancel_order(self, exchange, order_id):
+        """
+        Cancel the order through ccxt library for a certain exchange
+        :param exchange:
+        :param order_id:
+        :return:
+        """
+        return self.ccxt.cancel_order(exchange, order_id)

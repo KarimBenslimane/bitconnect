@@ -19,8 +19,8 @@ class Process:
         Initiate the correct process class
         :return:
         """
-        if self.botParams['type'] == Bot.TYPE_ARBITRAGE:
-            return ArbitrageProcess(self.botParams)
+        if self.botParams[Bot.BOT_TYPE] == Bot.TYPE_ARBITRAGE:
+            return ArbitrageProcess(self.botParams[Bot.BOT_ID])
 
     def start_process(self):
         """
