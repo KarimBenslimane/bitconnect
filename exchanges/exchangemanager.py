@@ -77,6 +77,7 @@ class ExchangeManager:
         :return bool:
         """
         pairs = self.ccxt.get_pairs(exchange)
+        print(pairs)
         return pair in pairs
 
     def fetch_balance(self, exchange, pair):
@@ -108,7 +109,7 @@ class ExchangeManager:
         """
         return self.ccxt.get_market_price(exchange, pair, type)
 
-    def place_order(self, exchange, pair, type, amount, price):
+    def place_order(self, exchange, pair, type, amount, price = None):
         """
         Place an order through the ccxt library for a certain exchange,
         for a certain pair (BTC/USD), type as buy/sell, and amount in currency (if BTC/USD will be BTC)

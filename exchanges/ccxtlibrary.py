@@ -98,7 +98,7 @@ class CcxtLibrary:
             price = ask
         return float(price)
 
-    def place_order(self, exchange, pair, type, amount, price):
+    def place_order(self, exchange, pair, type, amount, price = None):
         """
         Place an order through the ccxt library
         #TODO: might need to test what is best, market or limit orders.
@@ -110,11 +110,21 @@ class CcxtLibrary:
         """
         ccxt_exchange = self.load_markets(exchange)
         if type == "buy":
-            return ccxt_exchange.create_limit_buy_order(pair, amount, price)
-            # return exchange.create_market_buy_order (symbol, amount[, params])
+            if price:
+                return ccxt_exchange.create_limit_buy_order(pair, amount, price)
+            else:
+                if exchange.has['createMarketOrder']:
+                    return exchange.create_market_buy_order(pair, amount)
+                else:
+                    raise Exception("This exchange does not accept market orders.")
         else:
-            return ccxt_exchange.create_limit_sell_order(pair, amount, price)
-            # return exchange.create_market_sell_order (symbol, amount[, params])
+            if price:
+                return ccxt_exchange.create_limit_sell_order(pair, amount, price)
+            else:
+                if exchange.has['createMarketOrder']:
+                    return exchange.create_market_sell_order(pair, amount)
+                else:
+                    raise Exception("This exchange does not accept market orders.")
 
     def cancel_order(self, exchange, id):
         """

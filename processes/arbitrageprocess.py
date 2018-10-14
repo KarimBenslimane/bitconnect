@@ -66,7 +66,7 @@ class ArbitrageProcess():
         Find the exchanges that are needed for the arbitrage
         """
         exchange_one = self.fetch_exchanges(self.arbitrage.get_exchange_one())
-        exchange_two = self.fetch_exchanges(self.arbitrage.get_exchange_one())
+        exchange_two = self.fetch_exchanges(self.arbitrage.get_exchange_two())
         if exchange_one and exchange_two:
             self.exchanges_one = exchange_one
             self.exchanges_two = exchange_two
@@ -110,8 +110,8 @@ class ArbitrageProcess():
         """
         Take exchange as base exchange (A) value,
         loop through the other exchange (B) and compare value with base exchange,
-        if base exchange is significantly lower,
-        put base exchange as BUY and exchange B as SELL.
+        if base exchange is value A significantly lower than B,
+        put base exchange A as BUY and exchange B as SELL.
         """
         # TODO: check on fees, make a real arbitrage transaction and see what fees are applied
         print("magic starts")
@@ -120,18 +120,27 @@ class ArbitrageProcess():
         pair = self.bot.get_pair()
         buy_and_sell = {}
         for a_exchange in self.exchanges_one:
-            a_fee_percentage = self.exchange_manager.get_exchange_trading_fee(a_exchange, pair,
-                                                                              "maker")  # maker costs in %
+            a_fee_percentage = self.exchange_manager.get_exchange_trading_fee(
+                a_exchange,
+                pair,
+                "maker"
+            )  # maker costs in %
             a_price = self.exchange_manager.get_market_price(a_exchange, pair, "buy")  # get price from base exchange
-            fee_maker = (a_price * amount) * a_fee_percentage  # calculate the maker fee in $?
+            fee_maker = (a_price * amount) * a_fee_percentage  # calculate the maker fee in 'base currency BTC/USD (BTC)?'
             for b_exchange in self.exchanges_two:  # now loop through the remainder of the exchanges
                 if b_exchange != a_exchange:
                     # TODO: INTERCHANGE THESE 2 IF's
                     # if b_exchange.get_id() != a_exchange.get_id():
-                    b_fee_percentage = self.exchange_manager.get_exchange_trading_fee(b_exchange, pair,
-                                                                                      "taker")  # taker costs in %
-                    b_price = self.exchange_manager.get_market_price(b_exchange, pair,
-                                                                     "sell")  # get price from comparison exchange
+                    b_fee_percentage = self.exchange_manager.get_exchange_trading_fee(
+                        b_exchange,
+                        pair,
+                        "taker"
+                    )  # taker costs in %t
+                    b_price = self.exchange_manager.get_market_price(
+                        b_exchange,
+                        pair,
+                        "sell"
+                    )  # get price from comparison exchange
                     fee_taker = (b_price * amount) * b_fee_percentage  # calculate the taker fee in #?
                     turnover = (b_price - a_price) * amount  # calculate the turnover
                     total_fees = fee_maker + fee_taker  # calculate the total fees
@@ -159,29 +168,27 @@ class ArbitrageProcess():
             buy_order["exchange"],
             self.bot.get_pair(),
             "buy",
-            self.bot.get_amount(),
-            buy_order["price"]
+            self.bot.get_amount()
         )
+        #TODO: WAIT UNTIL BUY_ORDER IS COMPLETE
+        #TODO: CHECK AGAIN IF SELL PRICE IS GOOD(times x), ELSE SELL LESS/SELL EQUAL BUY PRICE
         if not buy_result["id"]:
-            raise Exception("Could not place order. " + buy_result["info"])
+            raise Exception("Could not place BUY order. " + buy_result["info"])
         # then if it went sucessfully place the sell order
         sell_order = verdict["sell"]
         sell_result = self.exchange_manager.place_order(
             sell_order["exchange"],
             self.bot.get_pair(),
             "sell",
-            self.bot.get_amount(),
-            sell_order["price"]
+            self.bot.get_amount()
         )
         if not sell_result["id"]:
-            self.exchange_manager.cancel_order(buy_order["exchange"], buy_result["id"])
-            raise Exception("Could not place order. " + sell_result["info"])
+            raise Exception("Could not place SELL order. " + sell_result["info"])
         self.make_order_open()
 
     def make_order_open(self):
         """
-        Set local open order variable to true so no new order will be placed for this bot,
-        and update the databe.
+        Set local open order variable to true so no new order will be placed for this bot
         :return:
         """
         self.open_order = True
