@@ -92,6 +92,7 @@ class BotRepository(RepositoryInterface):
         model.set_status(data[7])
         model.set_pair(data[8])
         model.set_userid(data[9])
+        model.set_updated_at(data[10])
         return model
 
     def delete(self, bot_id):

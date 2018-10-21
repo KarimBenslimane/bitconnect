@@ -49,6 +49,7 @@ class ArbitrageProcess():
                     verdict = self.do_magic()
                     if verdict:
                         self.place_orders(verdict)
+                        self.finish_bot()
             except Exception as e:
                 print(strftime('%Y%m%d%H%M%S') + ' ' + str(e))
                 self.logger.info(str(e))
@@ -170,8 +171,7 @@ class ArbitrageProcess():
             "buy",
             self.bot.get_amount()
         )
-        #TODO: WAIT UNTIL BUY_ORDER IS COMPLETE
-        #TODO: CHECK AGAIN IF SELL PRICE IS GOOD(times x), ELSE SELL LESS/SELL EQUAL BUY PRICE
+        #TODO: CREATE ORDER MODEL WITH BUY TYPE
         if not buy_result["id"]:
             raise Exception("Could not place BUY order. " + buy_result["info"])
         # then if it went sucessfully place the sell order
@@ -182,16 +182,18 @@ class ArbitrageProcess():
             "sell",
             self.bot.get_amount()
         )
+        #TODO: CREATE ORDER MODEL WITH SELL TYPE
         if not sell_result["id"]:
             raise Exception("Could not place SELL order. " + sell_result["info"])
-        self.make_order_open()
+        self.open_order = True
 
-    def make_order_open(self):
+    def finish_bot(self):
         """
         Set local open order variable to true so no new order will be placed for this bot
         :return:
         """
-        self.open_order = True
+        #TODO: fetch the order data wait untill closed and save them in order DB?
+        self.bot.set_status(Bot.STATUS_FINISHED)
 
     def turn_on_bot(self):
         """

@@ -68,37 +68,37 @@ class CcxtLibrary:
         ccxt_exchange = self.load_markets(exchange)
         return ccxt_exchange.markets[pair]
 
-    def get_exchange_trading_fee(self, exchange, pair, type):
+    def get_exchange_trading_fee(self, exchange, pair, fee_type):
         """
         Retrieves the trading fees IN PERCENTAGES for a taker or maker
-        A taker type 'takes' liquidity from the exchange and fill someone else's order
-        A maker type 'makes' liquidity for the exchange and order
+        A taker fee_type 'takes' liquidity from the exchange and fill someone else's order
+        A maker fee_type 'makes' liquidity for the exchange and order
         :param exchange:
         :param pair:
-        :param type:
+        :param fee_type:
         :return:
         """
-        return float(self.get_exchange_pair(exchange, pair)[type])
+        return float(self.get_exchange_pair(exchange, pair)[fee_type])
 
-    def get_market_price(self, exchange, pair, type):
+    def get_market_price(self, exchange, pair, price_type):
         """
         Get market price for buy (bid) or sell (ask) for a certain currency on a certain exchange
         :param exchange:
         :param pair:
-        :param type:
+        :param price_type:
         :return:
         """
         ccxt_exchange = self.load_markets(exchange)
         orderbook = ccxt_exchange.fetch_order_book(pair)
         bid = orderbook['bids'][0][0] if len(orderbook['bids']) > 0 else None
         ask = orderbook['asks'][0][0] if len(orderbook['asks']) > 0 else None
-        if type == "buy":
+        if price_type == "buy":
             price = bid
         else:
             price = ask
         return float(price)
 
-    def place_order(self, exchange, pair, type, amount, price = None):
+    def place_order(self, exchange, pair, order_type, amount, price = None):
         """
         Place an order through the ccxt library
         #TODO: might need to test what is best, market or limit orders.
@@ -109,7 +109,7 @@ class CcxtLibrary:
         :return:
         """
         ccxt_exchange = self.load_markets(exchange)
-        if type == "buy":
+        if order_type == "buy":
             if price:
                 return ccxt_exchange.create_limit_buy_order(pair, amount, price)
             else:

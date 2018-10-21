@@ -9,6 +9,7 @@ class Bot:
     BOT_STATUS = 'status'
     BOT_PAIR = 'pair'
     BOT_USERID = 'user_id'
+    BOT_UPDATED = 'updated_at'
 
     TYPE_ARBITRAGE = 'arbitrage'
 
@@ -28,6 +29,7 @@ class Bot:
     status = ''
     pair = ''
     userid = ''
+    updated_at = ''
 
     def set_id(self, id):
         self.id = id
@@ -64,6 +66,9 @@ class Bot:
     def set_userid(self, userid):
         self.userid = userid
 
+    def set_updated_at(self, updated_at):
+        self.updated_at = updated_at
+
     def get_id(self):
         return self.id
 
@@ -93,3 +98,6 @@ class Bot:
 
     def get_userid(self):
         return self.userid
+
+    def get_updated_at(self):
+        return self.updated_at
