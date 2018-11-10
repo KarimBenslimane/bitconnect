@@ -30,6 +30,6 @@ class Process:
         self.process.start_process()
 
 
-bot_values = json.loads(sys.argv[1])
-process = Process(bot_values)
-process.start_process()
+# bot_values = json.loads(sys.argv[1])
+# process = Process(bot_values)
+# process.start_process()

@@ -5,12 +5,30 @@ from helpers.logger import Logger
 import json
 import traceback
 import subprocess
+from twisted.internet import reactor, task, defer
+from twisted.web.server import Site
+from twisted.web.resource import Resource
+import queue
 
 #TODO: add argument for test setup
 #TODO: make loop
+
+logger = Logger("updater")
+
+@defer.inlineCallbacks
+def process_task(name, work_queue):
+    try:
+        print(1)
+    except Exception as e:
+        print(str(e))
+
+class OrderReceiver(Resource):
+    def render_POST(self, request):
+        print(request)
+        return '<html><body>You submitted: %s</body></html>' % (cgi.escape(request.args["the-field"][0]),)
+
 def update():
     print('starting updater....')
-    logger = Logger("updater")
     botmanager = BotManager()
     arbitragemanager = ArbitrageManager()
     active = True
@@ -20,7 +38,15 @@ def update():
         #check database for new bot
         new_bots = botmanager.get_new_bot()
         if new_bots:
-            print('new bot found')
+            #put work in the queue
+            print('new bots found')
+            work_queue = queue.Queue()
+            for bot in new_bots:
+                work_queue.put(bot)
+            #run tasks per bot type
+            defer.DeferredList([
+                task.deferLater(reactor, 0, process_task, 'Process Tasks', work_queue)
+            ])
             #TODO: choose subprocess
             #start each bot and create subprocesses per type bot?
             for bot in new_bots:
@@ -35,3 +61,8 @@ def update():
 
 if __name__ == '__main__':
     update()
+    root = Resource()
+    root.putChild("orders", OrderReceiver())
+    factory = Site(root)
+    reactor.listenTCP(8880, factory)
+    reactor.run()

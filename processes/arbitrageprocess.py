@@ -159,8 +159,6 @@ class ArbitrageProcess():
         :param verdict:
         :return:
         """
-        # TODO: log possible profit to make an overview while letting the bot run multiple times or something
-        # TODO: actual order placements
         print(verdict)
         print("placing order")
         # first do the buy order

@@ -76,8 +76,7 @@ class OrderRepository(RepositoryInterface):
                 bot_id
             ]
         )
-        # TODO: maybe replace last_insert_id with something specific
-        # TODO: when many people will use the system to avoid wrong ids return
+        # TODO: ADD TO CONNECTION CLASS INSERT QUERY AT THE END
         return self.get(self.connection.query_last_insert_id())
 
     def create_model(self, data):
