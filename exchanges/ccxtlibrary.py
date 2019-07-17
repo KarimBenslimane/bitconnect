@@ -1,5 +1,5 @@
 import ccxt
-
+from pprint import pprint
 
 class CcxtLibrary:
     def get_exchanges(self):
@@ -135,3 +135,17 @@ class CcxtLibrary:
         """
         ccxt_exchange = self.load_markets(exchange)
         ccxt_exchange.cancel_order(id)
+
+    def get_history_data(self, exchange, pair, timedelta):
+        """
+        Get the history data for a certain exchange for a certain time for a certain pair through the CCXT library
+        :param exchange:
+        :param pair:
+        :param timedelta:
+        :return:
+        """
+        ccxt_exchange = self.load_markets(exchange)
+        if ccxt_exchange.has['fetchOHLCV'] == True:
+            return ccxt_exchange.fetch_ohlcv(ccxt_exchange.markets[pair]['symbol'], '1h', timedelta)
+        else:
+            raise Exception("This exchange does not accept OHLCV")

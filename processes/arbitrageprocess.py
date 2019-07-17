@@ -1,4 +1,3 @@
-from bot.arbitrage import Arbitrage
 from bot.arbitragemanager import ArbitrageManager
 from bot.bot import Bot
 from bot.botmanager import BotManager
@@ -9,7 +8,7 @@ from time import strftime
 import traceback
 
 
-class ArbitrageProcess():
+class ArbitrageProcess:
     logger = None
     open_order = False
     exchanges_one = []
@@ -37,8 +36,6 @@ class ArbitrageProcess():
         Start the arbitrage process by checking the balances on the exchanges first,
         then making a verdict on the prices and if viable place an order, repeat.
         """
-        # TODO: uncomment this line
-        # self.turn_on_bot()
         print(strftime('%Y%m%d%H%M%S') + ' starting arbitrage process for bot#' + str(self.bot.get_id()))
         self.logger.info("#" + str(self.bot.get_id()) + ": Starting.")
         while not self.open_order:
@@ -192,11 +189,3 @@ class ArbitrageProcess():
         """
         #TODO: fetch the order data wait untill closed and save them in order DB?
         self.bot.set_status(Bot.STATUS_FINISHED)
-
-    def turn_on_bot(self):
-        """
-        Sets the status of the bot to on and updates the database for future processes
-        :return:
-        """
-        self.bot.set_status(Bot.STATUS_ON)
-        self.bot = self.bot_manager.update_bot(self.bot)

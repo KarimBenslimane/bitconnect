@@ -13,4 +13,3 @@ class DataCollector:
             btc_exchange_df = self.get_quandl_data(exchange_code)
             exchange_data[exchange] = btc_exchange_df
         return exchange_data
-

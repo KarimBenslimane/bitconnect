@@ -19,5 +19,5 @@ class List(BaseAction):
         if args.id:
             self.exchange_manager.list_exchanges({Exchange.EXCHANGE_ID: args.id})
         else:
-            self.exchange_manager.list_exchanges([])
+            self.exchange_manager.list_exchanges()
         return self

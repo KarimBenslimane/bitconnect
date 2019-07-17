@@ -5,6 +5,7 @@ from bot.bot import Bot
 from exchanges.exchange import Exchange
 from user.usermanager import UserManager
 from exchanges.exchangemanager import ExchangeManager
+from bot.macdmanager import MacdManager
 
 
 class Create(BaseAction):
@@ -12,6 +13,7 @@ class Create(BaseAction):
     arbi_manager = None
     user_manager = None
     exchange_manager = None
+    macd_manager = None
 
     def __init__(self):
         super().__init__()
@@ -21,6 +23,7 @@ class Create(BaseAction):
         self.arbi_manager = ArbitrageManager()
         self.user_manager = UserManager()
         self.exchange_manager = ExchangeManager()
+        self.macd_manager = MacdManager()
         self.flags.append(['-pa', '--pair'])
         self.flags.append(['-t', '--type'])
         self.flags.append(['-th', '--threshold'])
@@ -47,7 +50,7 @@ class Create(BaseAction):
         if args.bottype == Bot.TYPE_ARBITRAGE:
             if not args.exchange1 or not args.exchange2:
                 raise Exception("Exchange 1 and exchange 2 arguments must be given for ARBITRAGE.")
-            if not self.valid_pairs(str(args.pair), args.exchange1, args.exchange2, user_id):
+            if not self.valid_pairs(str(args.pair), [args.exchange1, args.exchange2], user_id):
                 raise Exception("Crypto pair not valid. (example: BTC/ETH)")
             else:
                 self.create_arbitrage(
@@ -59,6 +62,22 @@ class Create(BaseAction):
                     args.amount,
                     args.exchange1,
                     args.exchange2,
+                    user_id
+                )
+        elif args.bottype == Bot.TYPE_MACD:
+            if not args.exchange1:
+                raise Exception("Exchange 1 must be given for MACD")
+            if not self.valid_pairs(str(args.pair), [args.exchange1], user_id):
+                raise Exception("Crypto pair not valid for exchange. (example: BTC/ETH)")
+            else:
+                self.create_macd(
+                    args.pair,
+                    args.bottype,
+                    args.threshold,
+                    args.winlimit,
+                    args.losslimit,
+                    args.amount,
+                    args.exchange1,
                     user_id
                 )
         print("Successfully created the bot")
@@ -99,7 +118,22 @@ class Create(BaseAction):
         bot = self.create_bot(pair, bottype, threshold, winlimit, losslimit, amount, user_id)
         self.arbi_manager.create_arbitrage(bot.get_id(), exchange1, exchange2)
 
-    def valid_pairs(self, pair, e_one, e_two, user_id):
+    def create_macd(self, pair, bottype, threshold, winlimit, losslimit, amount, exchange, user_id):
+        """
+        Creates a Bot and the MACD
+        :param bottype:
+        :param threshold:
+        :param winlimit:
+        :param losslimit:
+        :param amount:
+        :param exchange:
+        :param user_id:
+        :return:
+        """
+        bot = self.create_bot(pair, bottype, threshold, winlimit, losslimit, amount, user_id)
+        self.macd_manager.create_macd(bot.get_id(), exchange)
+
+    def valid_pairs(self, pair, exchanges_names, user_id):
         """
         Check for (all) exchanges if the pairs exist
         :param pair:
@@ -108,11 +142,11 @@ class Create(BaseAction):
         :return bool:
         """
         exchanges = []
-        if e_one or e_two == "all":
+        if "all" in exchanges_names:
             exchanges = self.exchange_manager.get_exchanges({Exchange.EXCHANGE_USER: user_id})
         else:
-            exchanges.append(self.exchange_manager.get_exchanges({Exchange.EXCHANGE_USER: user_id, Exchange.EXCHANGE_NAME: e_one}))
-            exchanges.append(self.exchange_manager.get_exchanges({Exchange.EXCHANGE_USER: user_id, Exchange.EXCHANGE_NAME: e_two}))
+            for exchangename in exchanges_names:
+                exchanges = exchanges + self.exchange_manager.get_exchanges({Exchange.EXCHANGE_USER: user_id, Exchange.EXCHANGE_NAME: exchangename})
         for exchange in exchanges:
             if not self.exchange_manager.is_valid_pair(pair, exchange):
                 return False

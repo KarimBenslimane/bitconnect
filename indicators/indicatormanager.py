@@ -20,5 +20,3 @@ class IndicatorManager:
         
         self.indicators = Indicators(avg_btc_price, btc_datasets)
         self.indicators.plot_macd()
-
-    

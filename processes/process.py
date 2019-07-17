@@ -1,5 +1,6 @@
 from bot.bot import Bot
 from processes.arbitrageprocess import ArbitrageProcess
+from processes.macdprocess import MACDProcess
 import sys
 import json
 
@@ -21,6 +22,8 @@ class Process:
         """
         if self.botParams[Bot.BOT_TYPE] == Bot.TYPE_ARBITRAGE:
             return ArbitrageProcess(self.botParams[Bot.BOT_ID])
+        elif self.botParams[Bot.BOT_TYPE] == Bot.TYPE_MACD:
+            return MACDProcess(self.botParams[Bot.BOT_ID])
 
     def start_process(self):
         """
@@ -29,7 +32,6 @@ class Process:
         """
         self.process.start_process()
 
-
-# bot_values = json.loads(sys.argv[1])
-# process = Process(bot_values)
-# process.start_process()
+bot_values = json.loads(sys.argv[1])
+process = Process(bot_values)
+process.start_process()

@@ -36,10 +36,12 @@ class ExchangeManager:
         print("User id: " + exchange.get_user_id())
         print("\n")
 
-    def list_exchanges(self, search_criteria):
+    def list_exchanges(self, search_criteria=None):
         """
         List all exchanges or one exchange if -id option is given
         """
+        if search_criteria is None:
+            search_criteria = {}
         exchanges = self.get_exchanges(search_criteria)
         for exchange in exchanges:
             self.print_exchange(exchange)
@@ -130,3 +132,13 @@ class ExchangeManager:
         :return:
         """
         return self.ccxt.cancel_order(exchange, order_id)
+
+    def get_history_data(self, exchange, pair, timedelta):
+        """
+        Get the the data for a certain exchange for a given pair for the last 700 hours
+        :param exchange:
+        :param pair:
+        :param timedelta:
+        :return array:
+        """
+        return self.ccxt.get_history_data(exchange, pair, timedelta)

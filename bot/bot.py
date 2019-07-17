@@ -12,6 +12,7 @@ class Bot:
     BOT_UPDATED = 'updated_at'
 
     TYPE_ARBITRAGE = 'arbitrage'
+    TYPE_MACD = 'macd'
 
     STATUS_ON = 'on'
     STATUS_OFF = 'off'
@@ -53,21 +54,27 @@ class Bot:
 
     def set_amount(self, amount):
         self.amount = amount
+        return self
 
     def set_created_at(self, created_at):
         self.created_at = created_at
+        return self
 
     def set_status(self, status):
         self.status = status
+        return self
 
     def set_pair(self, pair):
         self.pair = pair
+        return self
 
     def set_userid(self, userid):
         self.userid = userid
+        return self
 
     def set_updated_at(self, updated_at):
         self.updated_at = updated_at
+        return self
 
     def get_id(self):
         return self.id
