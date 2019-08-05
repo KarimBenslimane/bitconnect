@@ -1,6 +1,6 @@
-from indicators.datacollector import DataCollector
-from indicators.datasetcreator import DataSetCreator
-from indicators.indicators import Indicators
+from indicators.old_stuff.datacollector import DataCollector
+from indicators.old_stuff.datasetcreator import DataSetCreator
+from indicators.old_stuff.indicators import Indicators
 
 class IndicatorManager:
     data_collector = None
