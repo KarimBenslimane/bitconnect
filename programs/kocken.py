@@ -1,4 +1,4 @@
-from indicators.indicatormanager import IndicatorManager
+from indicators.old_stuff.indicatormanager import IndicatorManager
 
 def main():
     print("Starting....")
